@@ -5,12 +5,12 @@ env:
   global:
     - DOCKER_IP=localhost
   matrix:
-    - PHP_VERSION=7.0 IMAGE_FLAVOUR=cli
-    - PHP_VERSION=7.0 IMAGE_FLAVOUR=fpm
-    - PHP_VERSION=7.1 IMAGE_FLAVOUR=fpm
-    - PHP_VERSION=7.1 IMAGE_FLAVOUR=cli
-    - PHP_VERSION=7.2 IMAGE_FLAVOUR=cli
-    - PHP_VERSION=7.2 IMAGE_FLAVOUR=fpm
+    - PHP_VERSION=7.0 IMAGE_FLAVOUR=magento_cli
+    - PHP_VERSION=7.0 IMAGE_FLAVOUR=magento
+    - PHP_VERSION=7.1 IMAGE_FLAVOUR=magento
+    - PHP_VERSION=7.1 IMAGE_FLAVOUR=magento_cli
+    - PHP_VERSION=7.2 IMAGE_FLAVOUR=magento_cli
+    - PHP_VERSION=7.2 IMAGE_FLAVOUR=magento
 
 script:
   - bash test-runner.sh

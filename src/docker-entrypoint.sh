@@ -31,7 +31,7 @@ fi
 mkdir -p $MAGENTO_ROOT
 chown www-data:www-data $MAGENTO_ROOT
 
-<?php if ($flavour === 'cli'): ?>
+<?php if ($flavour === 'magento_cli'): ?>
 
 CRON_LOG=/var/log/cron.log
 
@@ -61,7 +61,7 @@ fi
     docker-php-ext-enable xdebug && \
     echo "Xdebug is enabled"
 
-<?php if ($flavour === 'cli'): ?>
+<?php if ($flavour === 'magento_cli'): ?>
 
 # Configure composer
 [ ! -z "${COMPOSER_GITHUB_TOKEN}" ] && \
@@ -74,7 +74,7 @@ fi
 [ ! -z "${COMPOSER_BITBUCKET_KEY}" ] && [ ! -z "${COMPOSER_BITBUCKET_SECRET}" ] && \
     composer config --global bitbucket-oauth.bitbucket.org $COMPOSER_BITBUCKET_KEY $COMPOSER_BITBUCKET_SECRET
 
-<?php elseif ($flavour === 'fpm'): ?>
+<?php elseif ($flavour === 'magento'): ?>
 
 # Configure PHP-FPM
 [ ! -z "${MAGENTO_RUN_MODE}" ] && sed -i "s/!MAGENTO_RUN_MODE!/${MAGENTO_RUN_MODE}/" /usr/local/etc/php-fpm.conf

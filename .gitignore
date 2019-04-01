@@ -1,2 +1,5 @@
 /composer.env
 /magento
+/volume/.composer/
+/volume/mysql/
+!/volume/mysql/.gitkeep
