@@ -3,5 +3,6 @@
 /magento
 !/magento/.gitkeep
 /volume/.composer/
+!/volume/.composer/.gitkeep
 /volume/mysql/
 !/volume/mysql/.gitkeep

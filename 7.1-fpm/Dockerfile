@@ -40,6 +40,9 @@ RUN docker-php-ext-install \
 # Install Xdebug (but don't enable)
 RUN pecl install -o -f xdebug
 
+# Get composer installed to /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
+
 ENV PHP_MEMORY_LIMIT 2G
 ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento
@@ -47,8 +50,14 @@ ENV MAGENTO_ROOT /var/www/magento
 ENV DEBUG false
 ENV UPDATE_UID_GID false
 
+# Add bin files into container
+COPY bin/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/*
+
 ADD etc/php-xdebug.ini /usr/local/etc/php/conf.d/zz-xdebug-settings.ini
 ADD etc/mail.ini /usr/local/etc/php/conf.d/zz-mail.ini
+
+WORKDIR /var/www/magento
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
