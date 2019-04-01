@@ -1,5 +1,7 @@
+.idea
 /composer.env
 /magento
+!/magento/.gitkeep
 /volume/.composer/
 /volume/mysql/
 !/volume/mysql/.gitkeep
