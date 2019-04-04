@@ -1,4 +1,5 @@
 .idea
+/.env
 /composer.env
 /magento
 !/magento/.gitkeep

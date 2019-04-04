@@ -1,0 +1,34 @@
+#!/bin/bash
+
+[[ "${DEBUG}" =~ ^(true|on|1)$ ]] && set -x
+
+set -e
+
+MAGE_CONFIG_FILE="$MAGENTO_ROOT/app/etc/env.php"
+if [ -f $MAGE_CONFIG_FILE ]; then
+   echo "Remove $MAGE_CONFIG_FILE"
+   rm $MAGE_CONFIG_FILE
+fi
+
+composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-interaction --no-progress --no-suggest \
+  --optimize-autoloader --classmap-authoritative
+
+composer --no-interaction --prefer-dist --working-dir=$MAGENTO_ROOT install
+
+if [[ "$MAGENTO_RUN_MODE" =~ ^(developer)$ ]]; then
+    rm -rf ${MAGENTO_ROOT}/generated
+fi
+
+echo "Generate PHP interceptors"
+magento setup:di:compile
+
+
+if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
+    echo ""
+    echo "Build static files of the theme in production mode"
+    echo ""
+    magento setup:static-content:deploy -f --theme=all -- $MAGENTO_APP_LOCALE_CODE
+fi
+
+echo "Cleanup var folder"
+rm -fr $MAGENTO_ROOT/var/* 2> /dev/null || true

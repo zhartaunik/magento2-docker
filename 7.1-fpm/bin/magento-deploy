@@ -1,0 +1,47 @@
+#!/bin/bash
+
+[[ "${DEBUG}" =~ ^(true|on|1)$ ]] && set -x
+
+set -e
+
+echo "Deploy Magento"
+
+MAGENTO_DEPLOY="magento setup:config:set -s -n \
+    --key=$MAGENTO_APP_SECRET \
+    --db-host=$MAGENTO_APP_DB_HOST \
+    --db-name=$MAGENTO_APP_DB_NAME \
+    --db-user=$MAGENTO_APP_DB_USER \
+    --db-password=$MAGENTO_APP_DB_PASSWORD \
+    --cache-backend=redis \
+    --cache-backend-redis-server=redis \
+    --cache-backend-redis-port=6379 \
+    --cache-backend-redis-db=0 \
+    --page-cache=redis \
+    --page-cache-redis-server=redis \
+    --page-cache-redis-port=6379 \
+    --page-cache-redis-db=1 \
+    --session-save=redis \
+    --session-save-redis-host=redis \
+    --session-save-redis-port=6379 \
+    --session-save-redis-max-concurrency=10 \
+    --session-save-redis-disable-locking=0 \
+    --session-save-redis-break-after-frontend=5 \
+    --session-save-redis-log-level=3 \
+    --session-save-redis-db=2 \
+    --backend-frontname=$MAGENTO_APP_BACKEND_FRONTNAME"
+
+$MAGENTO_DEPLOY
+
+magento setup:upgrade --keep-generated -n
+
+magento cache:enable
+magento cache:flush
+
+echo "Setup OPCache"
+if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
+    composer dump-autoload -o --apcu
+else
+    composer dump-autoload -o
+fi
+
+echo "Deployment is successfully completed"

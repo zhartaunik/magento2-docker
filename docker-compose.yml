@@ -11,6 +11,14 @@ services:
     links:
       - web
 
+  redis:
+    command: redis-server --appendonly no --maxmemory-policy allkeys-lru --maxmemory 500mb --loglevel verbose
+    restart: always
+    image: redis:latest
+    hostname: redis.magento2.docker
+    ports:
+      - 6379:6379
+
   web:
     image: meanbee/magento2-nginx:1.9
     ports:
@@ -22,6 +30,7 @@ services:
       - magento
     env_file:
       - ./global.env
+      - ./.env
     #environment:
       #- VIRTUAL_HOST=magento2.docker
       #- VIRTUAL_PORT=80
@@ -34,11 +43,17 @@ services:
       - 8081:80
     links:
       - mysql
+      - redis
     volumes:
       - ./magento:/var/www/magento
       - ./volume/.composer:/var/www/.composer
     env_file:
       - ./global.env
+      - ./composer.env
+      - ./.env
+    environment:
+      - XDEBUG_CONFIG=idekey=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=magento2.docker
 
   mysql:
     image: mariadb:10
@@ -58,6 +73,7 @@ services:
     image: meanbee/magento2-php:7.1-cli
     links:
       - mysql
+      - redis
     volumes:
       - ./volume/.composer/cache:/root/.composer/cache
     volumes_from:
@@ -65,22 +81,7 @@ services:
     env_file:
       - ./global.env
       - ./composer.env
-    environment:
-      - M2SETUP_INSTALL_DB=true
-      - M2SETUP_DB_HOST=mysql
-      - M2SETUP_DB_NAME=magento2
-      - M2SETUP_DB_USER=magento2
-      - M2SETUP_DB_PASSWORD=magento2
-      - M2SETUP_BASE_URL=http://magento2.docker/
-      # - M2SETUP_SECURE_BASE_URL=https://magento2.docker/
-      - M2SETUP_BACKEND_FRONTNAME=admin
-      - M2SETUP_ADMIN_FIRSTNAME=Admin
-      - M2SETUP_ADMIN_LASTNAME=User
-      - M2SETUP_ADMIN_EMAIL=dummy@gmail.com
-      - M2SETUP_ADMIN_USER=admin
-      - M2SETUP_ADMIN_PASSWORD=admin123
-      - M2SETUP_VERSION=2.2.*
-      # - M2SETUP_USE_SAMPLE_DATA=true
+      - ./.env
 
   magento_cron:
     image: meanbee/magento2-php:7.1-cli
@@ -94,3 +95,4 @@ services:
       - magento
     links:
       - mysql
+      - redis

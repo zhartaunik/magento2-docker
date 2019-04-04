@@ -47,7 +47,7 @@ docker\:up:
 
 docker\:magento:
 	@echo "$(call yellow, 'Up all containers')"
-	@docker-compose -f docker-compose.yml up -d mysql magento web varnish
+	@docker-compose -f docker-compose.yml up -d redis mysql magento web varnish
 
 docker\:down:
 	@echo "$(call yellow, 'Down all containers')"

@@ -16,8 +16,11 @@ RUN apt-get update \
     libpng-dev \ 
     libxslt1-dev \ 
     sendmail-bin \ 
-    sendmail \ 
-    sudo
+    sendmail \
+    mysql-client \
+    sudo \
+    iputils-ping \
+    vim
 
 # Configure the gd library
 RUN docker-php-ext-configure \

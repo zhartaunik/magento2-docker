@@ -85,7 +85,6 @@ RUN curl -L https://github.com/punkstar/mageconfigsync/releases/download/0.5.0-b
 
 ADD bin/* /usr/local/bin/
 
-RUN ["chmod", "+x", "/usr/local/bin/magento-installer"]
 RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]

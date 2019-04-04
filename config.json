@@ -20,9 +20,6 @@
         "_disable_variables": true,
         "executable": true
       },
-      "bin/magento-installer": {
-        "executable": true
-      },
       "bin/magerun2": {
         "executable": true
       },
