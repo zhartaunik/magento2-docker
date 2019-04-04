@@ -28,7 +28,7 @@ help:
 
 	@echo "$(call red,'Docker')"
 	@echo "$(call format,'make','docker:up','Up all containers')"
-	@echo "$(call format,'make','docker:magento','Up nginx, varnish, fpm and mysql containers')"
+	@echo "$(call format,'make','docker:magento','Up nginx varnish fpm and mysql containers')"
 	@echo "$(call format,'make','docker:down','Down all containers')"
 	@echo "$(call format,'make','docker:ps','Show containers statuses')"
 	@echo "$(call format,'make','docker:exec','Run container')"
@@ -37,8 +37,8 @@ help:
 	@echo "$(call format,'make','docker:restart','Restart container')"
 	@echo "$(call format,'make','docker:build','Start build containers')"
 
-	@echo "$(call red,'Docker')"
-	@echo "$(call format,'make','magento','Opens magento application container')"
+	@echo "$(call red,'Magento')"
+	@echo "$(call format,'make','mg','Opens magento application container')"
 	@echo "$(call format,'make','cli','Opens magento cli container')"
 
 docker\:up:
