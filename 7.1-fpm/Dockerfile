@@ -18,6 +18,7 @@ RUN apt-get update \
     sendmail-bin \ 
     sendmail \
     mysql-client \
+    git \
     sudo \
     iputils-ping \
     vim
