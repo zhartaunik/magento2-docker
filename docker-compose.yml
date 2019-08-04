@@ -29,7 +29,6 @@ services:
     volumes_from:
       - magento
     env_file:
-      - ./global.env
       - ./.env
     #environment:
       #- VIRTUAL_HOST=magento2.docker
@@ -48,7 +47,6 @@ services:
       - ./magento:/var/www/magento
       - ./volume/.composer:/var/www/.composer
     env_file:
-      - ./global.env
       - ./composer.env
       - ./.env
     environment:
@@ -57,6 +55,8 @@ services:
 
   mysql:
     image: mariadb:10
+    build:
+      context: ./mysql
     ports:
       - 3306:3306
     volumes:
@@ -79,7 +79,6 @@ services:
     volumes_from:
       - magento
     env_file:
-      - ./global.env
       - ./composer.env
       - ./.env
 
@@ -87,8 +86,6 @@ services:
     image: meanbee/magento2-php:7.2-cli
     hostname: magento2-cron.docker
     command: run-cron
-    env_file:
-      - ./global.env    
     environment:
       - ENABLE_SENDMAIL=true
     volumes_from:
@@ -96,3 +93,6 @@ services:
     links:
       - mysql
       - redis
+    env_file:
+      - ./composer.env
+      - ./.env

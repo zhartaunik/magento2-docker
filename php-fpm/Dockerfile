@@ -9,7 +9,8 @@ MAINTAINER Nick Jones <nick@nicksays.co.uk>
 # Install dependencies
 RUN apt-get update \
   && apt-get install -y \
-    libfreetype6-dev \ 
+    libfreetype6-dev \
+    libssh2-1-dev \
     libicu-dev \ 
     libjpeg62-turbo-dev \ 
     libmcrypt-dev \
@@ -38,18 +39,23 @@ RUN docker-php-ext-install \
   xsl \ 
   zip \ 
   soap \ 
-  bcmath
+  bcmath \
+  opcache
 
 RUN pecl install mcrypt-1.0.2
 RUN docker-php-ext-enable mcrypt
 
+RUN pecl install ssh2-1.1.2;
+RUN docker-php-ext-enable ssh2;
+
 # Install Xdebug (but don't enable)
-RUN pecl install -o -f xdebug
+RUN pecl install -o -f redis apcu xdebug \
+    && docker-php-ext-enable redis apcu
 
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
 
-ENV PHP_MEMORY_LIMIT 2G
+ENV PHP_MEMORY_LIMIT 2048M
 ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento
 
@@ -60,8 +66,11 @@ ENV UPDATE_UID_GID false
 COPY bin/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
-ADD etc/php-xdebug.ini /usr/local/etc/php/conf.d/zz-xdebug-settings.ini
-ADD etc/mail.ini /usr/local/etc/php/conf.d/zz-mail.ini
+ADD etc/apc.ini $PHP_INI_DIR/conf.d/zz-apc.ini
+ADD etc/php.ini $PHP_INI_DIR/conf.d/zz-php.ini
+ADD etc/php-xdebug.ini $PHP_INI_DIR/conf.d/zz-xdebug.ini
+ADD etc/opcache.ini $PHP_INI_DIR/conf.d/zz-opcache.ini
+ADD etc/mail.ini $PHP_INI_DIR/conf.d/zz-mail.ini
 
 WORKDIR /var/www/magento
 
@@ -73,8 +82,6 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 
 ENV MAGENTO_RUN_MODE developer
 ENV UPLOAD_MAX_FILESIZE 64M
-
-ADD etc/php-fpm.ini /usr/local/etc/php/conf.d/zz-magento.ini
 
 ADD etc/php-fpm.conf /usr/local/etc/
 
