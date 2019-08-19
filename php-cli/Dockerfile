@@ -20,7 +20,7 @@ RUN apt-get update \
     sudo \ 
     cron \ 
     rsyslog \ 
-    mysql-client \ 
+    mariadb-client \
     git
 
 # Configure the gd library

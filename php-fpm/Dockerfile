@@ -18,7 +18,7 @@ RUN apt-get update \
     libxslt1-dev \
     sendmail-bin \ 
     sendmail \
-    mysql-client \
+    mariadb-client \
     git \
     sudo \
     iputils-ping \
