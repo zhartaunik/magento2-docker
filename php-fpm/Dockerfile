@@ -72,6 +72,8 @@ ADD etc/php-xdebug.ini $PHP_INI_DIR/conf.d/zz-xdebug.ini
 ADD etc/opcache.ini $PHP_INI_DIR/conf.d/zz-opcache.ini
 ADD etc/mail.ini $PHP_INI_DIR/conf.d/zz-mail.ini
 
+RUN chmod +r $PHP_INI_DIR/conf.d/*
+
 WORKDIR /var/www/magento
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh

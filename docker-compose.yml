@@ -62,10 +62,10 @@ services:
     volumes:
       - ./volume/mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=magento2
-      - MYSQL_DATABASE=magento2
-      - MYSQL_USER=magento2
-      - MYSQL_PASSWORD=magento2
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
       - TERM=meh
 
   magento_cli:

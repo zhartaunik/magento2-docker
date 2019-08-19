@@ -15,15 +15,13 @@ composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-interaction 
 
 composer --no-interaction --prefer-dist --working-dir=$MAGENTO_ROOT install
 
-if [[ "$MAGENTO_RUN_MODE" =~ ^(developer)$ ]]; then
+if [[ "${MAGENTO_RUN_MODE}" =~ ^(developer)$ ]]; then
     rm -rf ${MAGENTO_ROOT}/generated
 fi
 
-echo "Generate PHP interceptors"
-magento setup:di:compile
-
-
 if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
+    echo "Generate PHP interceptors"
+    magento setup:di:compile
     echo ""
     echo "Build static files of the theme in production mode"
     echo ""
