@@ -12,11 +12,12 @@ services:
       - web
 
   redis:
-    restart: unless-stopped
-    build:
-      context: ./redis
+    command: redis-server --appendonly no --maxmemory-policy allkeys-lru --maxmemory 500mb --loglevel verbose
+    restart: always
+    image: redis:latest
+    hostname: redis.magento2.docker
     ports:
-     - 6379:6379
+      - 127.0.0.1:6379:6379
 
   web:
     image: meanbee/magento2-nginx:1.9
