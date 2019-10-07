@@ -55,6 +55,29 @@ RUN pecl install -o -f redis apcu xdebug \
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
 
+ARG PHP_NODE_NPM_HOME=/var/www/.npm
+ARG PHP_NODE_NPM_CONFIG=/var/www/.config
+
+ENV PHP_NODE_NPM_HOME ${PHP_NODE_NPM_HOME}
+ENV PHP_NODE_NPM_CONFIG ${PHP_NODE_NPM_CONFIG}
+
+RUN mkdir -p $PHP_NODE_NPM_HOME \
+    $PHP_NODE_NPM_CONFIG \
+    && chown -R www-data:www-data $PHP_NODE_NPM_HOME \
+    $PHP_NODE_NPM_CONFIG
+
+# install node.js
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+RUN apt-get install -y fontconfig
+# Clean Up
+#    && rm -rf /var/lib/apt/lists/* \
+#	&& apt-get clean -y
+RUN npm install -g grunt
+RUN npm install phantomjs
+#RUN chown -R www-data:www-data /var/www/magento/node_modules
+
 ENV PHP_MEMORY_LIMIT 2048M
 ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento

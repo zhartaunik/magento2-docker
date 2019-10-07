@@ -96,3 +96,12 @@ services:
     env_file:
       - ./composer.env
       - ./.env
+
+  chrome:
+    image: selenium/standalone-chrome:3.141.59-titanium
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - 4444:4444
+    extra_hosts:
+      - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
