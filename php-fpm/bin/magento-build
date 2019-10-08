@@ -16,7 +16,7 @@ composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-interaction 
 composer --no-interaction --prefer-dist --working-dir=$MAGENTO_ROOT install
 
 if [[ "${MAGENTO_RUN_MODE}" =~ ^(developer)$ ]]; then
-    rm -rf ${MAGENTO_ROOT}/generated
+    rm -rf ${MAGENTO_ROOT}/generated/*
 fi
 
 if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
