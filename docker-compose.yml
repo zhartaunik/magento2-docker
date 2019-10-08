@@ -23,6 +23,7 @@ services:
     image: meanbee/magento2-nginx:1.9
     ports:
       - 80:80
+      - 443:443
     links:
       - magento
       - mysql
