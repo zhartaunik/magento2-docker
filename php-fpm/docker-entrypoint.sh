@@ -124,6 +124,14 @@ if [[ "${PHP_XDEBUG_ENABLE}" =~ ^(true|on|1)$ ]]; then
         echo "Coverage is disable"
     fi
 
+    if [[ "${PHP_XDEBUG_REMOTE_LOG_PATH}" =~ ^(true|on|1)$ ]]; then
+        sed -i "s|{{PHP_XDEBUG_REMOTE_LOG_PATH}}|${PHP_XDEBUG_REMOTE_LOG_PATH}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
+        echo "Coverage is enable"
+    else
+        sed -i "s|{{PHP_XDEBUG_REMOTE_LOG_PATH}}|0|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
+        echo "Coverage is disable"
+    fi
+
     if [[ "${PHP_XDEBUG_SCREAM}" =~ ^(true|on|1)$ ]]; then
         sed -i "s|{{PHP_XDEBUG_SCREAM}}|${PHP_XDEBUG_SCREAM}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
         echo "Scream is enable"

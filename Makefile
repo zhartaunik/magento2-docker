@@ -36,6 +36,7 @@ help:
 	@echo "$(call format,'make','docker:stop','Stop container')"
 	@echo "$(call format,'make','docker:restart','Restart container')"
 	@echo "$(call format,'make','docker:build','Start build containers')"
+	@echo "$(call format,'make','docker:magic','Down Build Start containers')"
 
 	@echo "$(call red,'Magento')"
 	@echo "$(call format,'make','mg','Opens magento application container')"
@@ -76,6 +77,8 @@ docker\:restart:
 docker\:build:
 	@echo "$(call yellow,'Start build containers')"
 	@docker-compose -f docker-compose-build.yml -f docker-compose.yml build $(call args)
+
+docker\:magic: docker\:down docker\:build docker\:magento
 
 mg:
 	@echo "$(call yellow,'Opens magento application container')"
