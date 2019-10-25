@@ -47,6 +47,8 @@ services:
     volumes:
       - ./magento:/var/www/magento
       - ./volume/.composer:/var/www/.composer
+    extra_hosts:
+      - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
     env_file:
       - ./composer.env
       - ./.env
