@@ -29,6 +29,7 @@ help:
 	@echo "$(call red,'Docker')"
 	@echo "$(call format,'make','docker:up','Up all containers')"
 	@echo "$(call format,'make','docker:magento','Up nginx varnish fpm and mysql containers')"
+	@echo "$(call format,'make','docker:live','Up nginx varnish fpm and mysql containers')"
 	@echo "$(call format,'make','docker:down','Down all containers')"
 	@echo "$(call format,'make','docker:ps','Show containers statuses')"
 	@echo "$(call format,'make','docker:exec','Run container')"
@@ -49,6 +50,10 @@ docker\:up:
 docker\:magento:
 	@echo "$(call yellow, 'Up all containers')"
 	@docker-compose -f docker-compose.yml up -d redis mysql magento web varnish chrome
+
+docker\:live:
+	@echo "$(call yellow, 'Up all containers')"
+	@docker-compose -f docker-compose-live.yml up -d redis mysql magento web varnish chrome
 
 docker\:down:
 	@echo "$(call yellow, 'Down all containers')"
