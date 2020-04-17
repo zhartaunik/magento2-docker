@@ -40,7 +40,8 @@ RUN docker-php-ext-install \
   zip \ 
   soap \ 
   bcmath \
-  opcache
+  opcache \
+  sockets
 
 RUN pecl install mcrypt-1.0.2
 RUN docker-php-ext-enable mcrypt

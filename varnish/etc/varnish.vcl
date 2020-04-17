@@ -5,7 +5,7 @@ import std;
 # For SSL offloading, pass the following header in your proxy server or load balancer: 'SSL-OFFLOADED: https'
 
 backend default {
-    .host = "web";
+    .host = "nginx";
     .port = "80";
 }
 

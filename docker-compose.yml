@@ -1,6 +1,9 @@
 version: "2"
 services:
   varnish:
+    container_name: varnish
+    build:
+      context: varnish/
     image: meanbee/magento2-varnish:latest
     environment:
       - VIRTUAL_HOST=magento2.docker
@@ -8,10 +11,11 @@ services:
       - HTTPS_METHOD=noredirect
     ports:
       - 81:80
-    links:
-      - web
+    depends_on:
+      - nginx
 
   redis:
+    container_name: redis
     command: redis-server --appendonly no --maxmemory-policy allkeys-lru --maxmemory 500mb --loglevel verbose
     restart: always
     image: redis:latest
@@ -19,31 +23,27 @@ services:
     ports:
       - 127.0.0.1:6379:6379
 
-  web:
+  nginx:
+    container_name: nginx
+    build:
+      context: nginx/
     image: meanbee/magento2-nginx:1.9
     ports:
       - 80:80
       - 443:443
-    links:
-      - magento
-      - mysql
     volumes_from:
       - magento
     env_file:
       - ./.env
-    #environment:
-      #- VIRTUAL_HOST=magento2.docker
-      #- VIRTUAL_PORT=80
-      #- HTTPS_METHOD=noredirect
 
   magento:
+    container_name: magento
     hostname: fpm.magento2.docker
+    build:
+      context: php-fpm/
     image: meanbee/magento2-php:7.2-fpm
     ports:
       - 8081:80
-    links:
-      - mysql
-      - redis
     volumes:
       - ./magento:/var/www/magento
       - ./volume/.composer:/var/www/.composer
@@ -57,6 +57,7 @@ services:
       - PHP_IDE_CONFIG=serverName=magento2.docker
 
   mysql:
+    container_name: mysql
     image: mariadb:10
     build:
       context: ./mysql
@@ -72,11 +73,10 @@ services:
       - TERM=meh
 
   magento_cli:
+    build:
+      context: php-cli/
     hostname: cli.magento2.docker
     image: meanbee/magento2-php:7.2-cli
-    links:
-      - mysql
-      - redis
     volumes:
       - ./volume/.composer/cache:/root/.composer/cache
     volumes_from:
@@ -86,6 +86,9 @@ services:
       - ./.env
 
   magento_cron:
+    container_name: cron
+    build:
+      context: php-cli/
     image: meanbee/magento2-php:7.2-cli
     hostname: magento2-cron.docker
     command: run-cron
@@ -93,14 +96,12 @@ services:
       - ENABLE_SENDMAIL=true
     volumes_from:
       - magento
-    links:
-      - mysql
-      - redis
     env_file:
       - ./composer.env
       - ./.env
 
   chrome:
+    container_name: chrome
     image: selenium/standalone-chrome:3.141.59-titanium
     volumes:
       - /dev/shm:/dev/shm
