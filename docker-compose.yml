@@ -4,13 +4,8 @@ services:
     container_name: varnish
     build:
       context: varnish/
-    image: meanbee/magento2-varnish:latest
-    environment:
-      - VIRTUAL_HOST=magento2.docker
-      - VIRTUAL_PORT=80
-      - HTTPS_METHOD=noredirect
     ports:
-      - 81:80
+      - 6081:6081
     depends_on:
       - nginx
 
@@ -27,11 +22,14 @@ services:
     container_name: nginx
     build:
       context: nginx/
-    image: meanbee/magento2-nginx:1.9
+    working_dir: /etc/nginx
     ports:
       # {internal_in_docker}:{external_from_browser}
       - 80:80
       - 443:443
+      - 8001:8001
+#    expose:
+#      -
     volumes_from:
       - magento
     env_file:

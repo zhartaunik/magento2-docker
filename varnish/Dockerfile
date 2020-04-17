@@ -1,8 +1,14 @@
-FROM million12/varnish
+FROM varnish:6.2
 
-MAINTAINER Ash Smith <ash.smith@meanbee.com>
+COPY etc/varnish.vcl /etc/varnish/
+COPY bin/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-ENV VCL_CONFIG /data/varnish.vcl
-ENV VARNISHD_PARAMS -p default_ttl=3600 -p default_grace=3600 -p feature=+esi_ignore_https -p feature=+esi_disable_xml_check
+ENV VARNISH_CONFIG  /etc/varnish/default.vcl
+ENV VARNISH_STORAGE malloc,2048m
+ENV VARNISH_LISTEN  :6081
+ENV VARNISH_MANAGEMENT_LISTEN 127.0.0.1:6082
+EXPOSE 6081
+EXPOSE 6082
 
-ADD etc/varnish.vcl /data/varnish.vcl
+ENTRYPOINT ["/bin/bash", "/docker-entrypoint.sh"]
