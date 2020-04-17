@@ -82,7 +82,7 @@ docker\:magic: docker\:down docker\:build docker\:magento
 
 mg:
 	@echo "$(call yellow,'Opens magento application container')"
-	@docker-compose -f docker-compose.yml exec magento bash
+	@docker-compose -f docker-compose.yml exec --user=magento magento bash
 
 cli:
 	@echo "$(call yellow,'Opens magento cli container')"

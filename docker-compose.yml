@@ -29,6 +29,7 @@ services:
       context: nginx/
     image: meanbee/magento2-nginx:1.9
     ports:
+      # {internal_in_docker}:{external_from_browser}
       - 80:80
       - 443:443
     volumes_from:
@@ -42,8 +43,6 @@ services:
     build:
       context: php-fpm/
     image: meanbee/magento2-php:7.2-fpm
-    ports:
-      - 8081:80
     volumes:
       - ./magento:/var/www/magento
       - ./volume/.composer:/var/www/.composer

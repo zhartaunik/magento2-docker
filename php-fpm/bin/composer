@@ -21,6 +21,3 @@ EOF'
 fi
 
 COMPOSER=$(which composer.phar)
-
-chmod +x $COMPOSER
-su -c "COMPOSER_HOME=/var/www/.composer $COMPOSER $*" -s /bin/bash www-data

@@ -111,4 +111,10 @@ ENV UPLOAD_MAX_FILESIZE 64M
 
 ADD etc/php-fpm.conf /usr/local/etc/
 
+RUN groupadd -g 1000 magento
+RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN mkdir /home/magento
+RUN chown -R magento:magento /home/magento
+RUN chown -R magento:magento /var/www/magento
+
 CMD ["php-fpm", "-F"]

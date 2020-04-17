@@ -2,7 +2,4 @@
 
 [[ "${DEBUG}" =~ ^(true|on|1)$ ]] && set -x
 
-MAGENTO_COMMAND="/var/www/magento/bin/magento"
-
-chmod +x $MAGENTO_COMMAND
-su -c "$MAGENTO_COMMAND $*" -s /bin/bash www-data
+php /var/www/magento/bin/magento
