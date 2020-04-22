@@ -16,6 +16,26 @@ services:
     ports:
       - 127.0.0.1:6379:6379
 
+  elastic:
+    container_name: elastic
+    build:
+      context: ./docker/elasticsearch
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ports:
+      - 9200:9200
+
   nginx:
     container_name: nginx
     build:
@@ -102,3 +122,6 @@ services:
       - 4444:4444
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
+
+volumes:
+  elasticsearch:

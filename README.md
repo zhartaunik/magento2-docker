@@ -4,8 +4,12 @@
 
 * Prepare env files:
 ```
-    cp .env.dist .env
-    cp composer.env.sample composer.env
+cp .env.dist .env
+cp composer.env.sample composer.env
 ```
 * In .env file fill MAGENTO_APP_SECRET and LOCAL_HOST_IP (required for xdebug)
 * Generate certificates for your domain
+* For elasticsearch work execute from your OS command line:
+```
+sudo sysctl -w vm.max_map_count=262144
+```
