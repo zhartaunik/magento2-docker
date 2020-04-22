@@ -6,8 +6,6 @@ services:
       context: varnish/
     ports:
       - 6081:6081
-    depends_on:
-      - nginx
 
   redis:
     container_name: redis
