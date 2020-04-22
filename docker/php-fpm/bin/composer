@@ -20,4 +20,4 @@ EOF'
     su -c "${AUTH_DUMP}" -s /bin/bash www-data
 fi
 
-COMPOSER=$(which composer.phar)
+$(which composer.phar) $*

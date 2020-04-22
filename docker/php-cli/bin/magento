@@ -2,4 +2,4 @@
 
 [[ "${DEBUG}" =~ ^(true|on|1)$ ]] && set -x
 
-php /var/www/magento/bin/magento
+php /var/www/magento/bin/magento $*

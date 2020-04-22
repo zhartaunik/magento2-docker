@@ -3,7 +3,7 @@ services:
   varnish:
     container_name: varnish
     build:
-      context: varnish/
+      context: ./docker/varnish/
     ports:
       - 6081:6081
 
@@ -19,7 +19,7 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: nginx/
+      context: ./docker/nginx/
     working_dir: /etc/nginx
     ports:
       # {internal_in_docker}:{external_from_browser}
@@ -35,16 +35,17 @@ services:
     container_name: magento
     hostname: fpm.magento2.docker
     build:
-      context: php-fpm/
+      context: ./docker/php-fpm/
     image: meanbee/magento2-php:7.2-fpm
     volumes:
       - ./magento:/var/www/magento
-      - ./volume/.composer:/var/www/.composer
+      - ./docker/volume/.composer:/var/www/.composer
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
     env_file:
       - ./composer.env
       - ./.env
+      - ./config.env
     environment:
       - XDEBUG_CONFIG=idekey=PHPSTORM
       - PHP_IDE_CONFIG=serverName=magento2.docker
@@ -53,11 +54,11 @@ services:
     container_name: mysql
     image: mariadb:10
     build:
-      context: ./mysql
+      context: ./docker/mysql
     ports:
       - 3306:3306
     volumes:
-      - ./volume/mysql:/var/lib/mysql
+      - ./docker/volume/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
@@ -67,11 +68,11 @@ services:
 
   magento_cli:
     build:
-      context: php-cli/
+      context: ./docker/php-cli/
     hostname: cli.magento2.docker
     image: meanbee/magento2-php:7.2-cli
     volumes:
-      - ./volume/.composer/cache:/root/.composer/cache
+      - ./docker/volume/.composer/cache:/root/.composer/cache
       - ./magento:/var/www/magento
     env_file:
       - ./composer.env
@@ -80,7 +81,7 @@ services:
   magento_cron:
     container_name: cron
     build:
-      context: php-cli/
+      context: ./docker/php-cli/
     image: meanbee/magento2-php:7.2-cli
     hostname: magento2-cron.docker
     command: run-cron

@@ -3,9 +3,9 @@
 /composer.env
 /magento
 !/magento/.gitkeep
-/nginx/etc/certs/
-!/nginx/etc/certs/.gitkeep
-/volume/.composer/
-!/volume/.composer/.gitkeep
-/volume/mysql/
-!/volume/mysql/.gitkeep
+/docker/nginx/etc/certs/
+!/docker/nginx/etc/certs/.gitkeep
+/docker/volume/.composer/
+!/docker/volume/.composer/.gitkeep
+/docker/volume/mysql/
+!/docker/volume/mysql/.gitkeep

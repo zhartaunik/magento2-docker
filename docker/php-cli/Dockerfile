@@ -51,7 +51,6 @@ ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento
 
 ENV DEBUG false
-ENV UPDATE_UID_GID false
 
 ADD etc/php-xdebug.ini /usr/local/etc/php/conf.d/zz-xdebug-settings.ini
 ADD etc/mail.ini /usr/local/etc/php/conf.d/zz-mail.ini
@@ -76,6 +75,15 @@ ADD etc/php-cli.ini /usr/local/etc/php/conf.d/zz-magento.ini
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+ARG PHP_NODE_NPM_HOME=/var/www/.npm
+ARG PHP_NODE_NPM_CONFIG=/var/www/.config
+
+ENV PHP_NODE_NPM_HOME ${PHP_NODE_NPM_HOME}
+ENV PHP_NODE_NPM_CONFIG ${PHP_NODE_NPM_CONFIG}
+
+RUN mkdir -p $PHP_NODE_NPM_HOME \
+    $PHP_NODE_NPM_CONFIG
+
 # Install magedbm2.phar and move to /usr/local/bin
 RUN curl -LO https://s3.eu-west-2.amazonaws.com/magedbm2-releases/magedbm2.phar && chmod +x ./magedbm2.phar && mv ./magedbm2.phar /usr/local/bin
 
@@ -87,5 +95,16 @@ ADD bin/* /usr/local/bin/
 RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
+
+RUN groupadd -g 1000 magento
+RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN mkdir -p /home/magento
+RUN mkdir -p /var/www/magento
+RUN mkdir -p /var/www/.composer
+RUN chown -R magento:magento /home/magento
+RUN chown -R magento:magento /var/www/magento
+RUN chown -R magento:magento /var/www/.composer
+RUN chown -R magento:magento $PHP_NODE_NPM_HOME
+RUN chown -R magento:magento $PHP_NODE_NPM_CONFIG
 
 CMD ["bash"]

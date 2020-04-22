@@ -63,8 +63,6 @@ ENV PHP_NODE_NPM_HOME ${PHP_NODE_NPM_HOME}
 ENV PHP_NODE_NPM_CONFIG ${PHP_NODE_NPM_CONFIG}
 
 RUN mkdir -p $PHP_NODE_NPM_HOME \
-    $PHP_NODE_NPM_CONFIG \
-    && chown -R www-data:www-data $PHP_NODE_NPM_HOME \
     $PHP_NODE_NPM_CONFIG
 
 # install node.js
@@ -84,7 +82,6 @@ ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento
 
 ENV DEBUG false
-ENV UPDATE_UID_GID false
 
 # Add bin files into container
 COPY bin/* /usr/local/bin/
@@ -113,8 +110,13 @@ ADD etc/php-fpm.conf /usr/local/etc/
 
 RUN groupadd -g 1000 magento
 RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
-RUN mkdir /home/magento
+RUN mkdir -p /home/magento
+RUN mkdir -p /var/www/magento
+RUN mkdir -p /var/www/.composer
 RUN chown -R magento:magento /home/magento
 RUN chown -R magento:magento /var/www/magento
+RUN chown -R magento:magento /var/www/.composer
+RUN chown -R magento:magento $PHP_NODE_NPM_HOME
+RUN chown -R magento:magento $PHP_NODE_NPM_CONFIG
 
 CMD ["php-fpm", "-F"]
