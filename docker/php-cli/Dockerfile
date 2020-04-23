@@ -92,6 +92,8 @@ RUN curl -L https://github.com/punkstar/mageconfigsync/releases/download/0.5.0-b
 
 ADD bin/* /usr/local/bin/
 
+RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
+
 RUN groupadd -g 1000 magento
 RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
 RUN mkdir -p /home/magento

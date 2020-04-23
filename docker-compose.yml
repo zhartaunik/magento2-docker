@@ -87,6 +87,7 @@ services:
       - TERM=meh
 
   magento_cli:
+    container_name: magento_cli
     build:
       context: ./docker/php-cli/
     hostname: cli.magento2.docker
@@ -99,7 +100,7 @@ services:
       - ./.env
 
   magento_cron:
-    container_name: cron
+    container_name: magento_cron
     build:
       context: ./docker/php-cli/
     image: meanbee/magento2-php:7.2-cli
