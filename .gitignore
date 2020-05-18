@@ -4,6 +4,7 @@
 /magento
 !/magento/.gitkeep
 /docker/nginx/etc/certs/
+!/docker/nginx/etc/certs/*.dist
 !/docker/nginx/etc/certs/.gitkeep
 /docker/volume/.composer/
 !/docker/volume/.composer/.gitkeep
