@@ -4,7 +4,7 @@
 
 # Configure composer
 if [ ! -f "$MAGENTO_COMPOSER_HOME/auth.json" ]; then
-AUTH_DUMP='cat <<EOF > ${MAGENTO_COMPOSER_HOME}/auth.json
+cat <<EOF > ${MAGENTO_COMPOSER_HOME}/auth.json
 {
   "github-oauth": {
     "github.com": "${COMPOSER_GITHUB_TOKEN}"
@@ -16,8 +16,6 @@ AUTH_DUMP='cat <<EOF > ${MAGENTO_COMPOSER_HOME}/auth.json
     }
   }
 }
-EOF'
-    su -c "${AUTH_DUMP}" -s /bin/bash www-data
-fi
+EOF
 
 $(which composer.phar) $*
