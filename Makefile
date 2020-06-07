@@ -49,7 +49,7 @@ docker\:up:
 
 docker\:magento:
 	@echo "$(call yellow, 'Up all containers')"
-	@docker-compose -f docker-compose.yml up -d redis mysql magento web varnish chrome
+	@docker-compose -f docker-compose.yml up -d redis elastic mysql magento nginx varnish chrome
 
 docker\:live:
 	@echo "$(call yellow, 'Up all containers')"
@@ -81,13 +81,13 @@ docker\:restart:
 
 docker\:build:
 	@echo "$(call yellow,'Start build containers')"
-	@docker-compose -f docker-compose-build.yml -f docker-compose.yml build $(call args)
+	@docker-compose -f docker-compose.yml build $(call args)
 
-docker\:magic: docker\:down docker\:build docker\:magento
+docker\:magic: docker\:down docker\:build docker\:up
 
 mg:
 	@echo "$(call yellow,'Opens magento application container')"
-	@docker-compose -f docker-compose.yml exec magento bash
+	@docker-compose -f docker-compose.yml exec --user=magento magento bash
 
 cli:
 	@echo "$(call yellow,'Opens magento cli container')"

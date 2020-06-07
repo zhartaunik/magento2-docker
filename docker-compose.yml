@@ -1,17 +1,14 @@
-version: "2"
+version: "3"
 services:
   varnish:
-    image: meanbee/magento2-varnish:latest
-    environment:
-      - VIRTUAL_HOST=magento2.docker
-      - VIRTUAL_PORT=80
-      - HTTPS_METHOD=noredirect
+    container_name: varnish
+    build:
+      context: ./docker/varnish/
     ports:
-      - 81:80
-    links:
-      - web
+      - 6081:6081
 
   redis:
+    container_name: redis
     command: redis-server --appendonly no --maxmemory-policy allkeys-lru --maxmemory 500mb --loglevel verbose
     restart: always
     image: redis:latest
@@ -19,39 +16,56 @@ services:
     ports:
       - 127.0.0.1:6379:6379
 
-  web:
-    image: meanbee/magento2-nginx:1.9
+  elastic:
+    container_name: elastic
+    build:
+      context: ./docker/elasticsearch
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     ports:
+      - 9200:9200
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/nginx/
+    working_dir: /etc/nginx
+    ports:
+      # {internal_in_docker}:{external_from_browser}
       - 80:80
       - 443:443
-    links:
-      - magento
-      - mysql
-    volumes_from:
-      - magento
-    env_file:
-      - ./.env
-    #environment:
-      #- VIRTUAL_HOST=magento2.docker
-      #- VIRTUAL_PORT=80
-      #- HTTPS_METHOD=noredirect
-
-  magento:
-    hostname: fpm.magento2.docker
-    image: meanbee/magento2-php:7.2-fpm
-    ports:
-      - 8081:80
-    links:
-      - mysql
-      - redis
+      - 8001:8001
     volumes:
       - ./magento:/var/www/magento
-      - ./volume/.composer:/var/www/.composer
+    env_file:
+      - ./.env
+
+  magento:
+    container_name: magento
+    hostname: fpm.magento2.docker
+    build:
+      context: ./docker/php-fpm/
+    image: meanbee/magento2-php:7.2-fpm
+    volumes:
+      - ./magento:/var/www/magento
+      - ./docker/volume/.composer:/var/www/.composer
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
     env_file:
       - ./composer.env
       - ./.env
+      - ./config.env
     environment:
       - XDEBUG_CONFIG=idekey=PHPSTORM
       - PHP_IDE_CONFIG=serverName=magento2.docker
@@ -60,13 +74,14 @@ services:
       - PHP_XDEBUG_ENABLE=1
 
   mysql:
+    container_name: mysql
     image: mariadb:10
     build:
-      context: ./mysql
+      context: ./docker/mysql
     ports:
       - 3306:3306
     volumes:
-      - ./volume/mysql:/var/lib/mysql
+      - ./docker/volume/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
@@ -75,35 +90,35 @@ services:
       - TERM=meh
 
   magento_cli:
+    container_name: magento_cli
+    build:
+      context: ./docker/php-cli/
     hostname: cli.magento2.docker
     image: meanbee/magento2-php:7.2-cli
-    links:
-      - mysql
-      - redis
     volumes:
-      - ./volume/.composer/cache:/root/.composer/cache
-    volumes_from:
-      - magento
+      - ./docker/volume/.composer/cache:/root/.composer/cache
+      - ./magento:/var/www/magento
     env_file:
       - ./composer.env
       - ./.env
 
   magento_cron:
+    container_name: magento_cron
+    build:
+      context: ./docker/php-cli/
     image: meanbee/magento2-php:7.2-cli
     hostname: magento2-cron.docker
     command: run-cron
     environment:
       - ENABLE_SENDMAIL=true
-    volumes_from:
-      - magento
-    links:
-      - mysql
-      - redis
+    volumes:
+      - ./magento:/var/www/magento
     env_file:
       - ./composer.env
       - ./.env
 
   chrome:
+    container_name: chrome
     image: selenium/standalone-chrome:3.141.59-titanium
     volumes:
       - /dev/shm:/dev/shm
@@ -111,3 +126,6 @@ services:
       - 4444:4444
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
+
+volumes:
+  elasticsearch:

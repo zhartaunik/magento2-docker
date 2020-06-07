@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[[ "${DEBUG}" =~ ^(true|on|1)$ ]] && set -x
+
+php /var/www/magento/bin/magento $*
