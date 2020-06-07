@@ -17,5 +17,6 @@ cat <<EOF > ${MAGENTO_COMPOSER_HOME}/auth.json
   }
 }
 EOF
+fi
 
 $(which composer.phar) $*
