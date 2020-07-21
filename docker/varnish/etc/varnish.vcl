@@ -10,7 +10,8 @@ backend default {
 }
 
 acl purge {
-    "nginx";
+    "192.168.0.0"/16;
+    "172.16.0.0"/12;
 }
 
 sub vcl_recv {
