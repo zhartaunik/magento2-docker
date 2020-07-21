@@ -36,6 +36,7 @@ MAGENTO_INSTALL="magento setup:install \
     --backend-frontname=$MAGENTO_APP_BACKEND_FRONTNAME \
     --elasticsearch-host $ELASTICSEARCH_HOST \
     --elasticsearch-port $ELASTICSEARCH_PORT \
+    --http-cache-hosts=$DOMAIN_NAME:6081 \
     --cleanup-database"
 
 if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = "true" ]; then
