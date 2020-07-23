@@ -117,5 +117,23 @@ services:
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
 
+  rabbit:
+    container_name: rabbit
+    build:
+      context: ./docker/rabbit
+    image: rabbitmq:latest
+    hostname: rabbit.magento2.docker
+    ports:
+      - 15672:15672
+      - 5672:5672
+    expose:
+      - 15672
+      - 5672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    env_file:
+      - ./.env
+
 volumes:
   elasticsearch:
+  rabbitmq:
