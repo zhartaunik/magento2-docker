@@ -34,6 +34,14 @@ MAGENTO_INSTALL="magento setup:install \
     --session-save-redis-log-level=3 \
     --session-save-redis-db=2 \
     --backend-frontname=$MAGENTO_APP_BACKEND_FRONTNAME \
+    --elasticsearch-host $ELASTICSEARCH_HOST \
+    --elasticsearch-port $ELASTICSEARCH_PORT \
+    --http-cache-hosts=$DOMAIN_NAME:6081 \
+    --amqp-host=$DOMAIN_NAME \
+    --amqp-port=5672 \
+    --amqp-user=$RABBITMQ_USER \
+    --amqp-password=$RABBITMQ_PASSWORD \
+    --amqp-virtualhost=$RABBITMQ_VIRTUALHOST \
     --cleanup-database"
 
 if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = "true" ]; then
