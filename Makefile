@@ -78,7 +78,7 @@ docker\:build:
 	@echo "$(call yellow,'Start build containers')"
 	@docker-compose -f docker-compose.yml build $(call args)
 
-docker\:magic: docker\:down docker\:build docker\:up
+docker\:magic: docker\:down docker\:build docker\:magento
 
 mg:
 	@echo "$(call yellow,'Opens magento application container')"
