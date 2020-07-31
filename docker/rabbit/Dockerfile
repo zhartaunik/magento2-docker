@@ -1,6 +1,4 @@
-FROM rabbitmq:latest
-
-RUN rabbitmq-plugins enable rabbitmq_management
+FROM rabbitmq:3-management
 
 # Define environment variables.
 ENV RABBITMQ_USER ${RABBITMQ_USER}
