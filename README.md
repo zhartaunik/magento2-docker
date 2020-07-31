@@ -42,3 +42,37 @@ sudo sysctl -w vm.max_map_count=262144
 ```shell script
 magento-build && magento-install
 ```
+
+## Configure PHPStorm
+
+Variables for interpreter:
+```xml
+<configuration_options>
+  <configuration_option name="memory_limit" value="4G" />
+  <configuration_option name="apc.enabled" value="0" />
+  <configuration_option name="apc.shm_size" value="0" />
+  <configuration_option name="apc.ttl" value="3600" />
+  <configuration_option name="apc.gc_ttl" value="32M" />
+  <configuration_option name="opcache.enable" value="0" />
+  <configuration_option name="opcache.memory_consumption" value="512MB" />
+  <configuration_option name="opcache.max_accelerated_files" value="60000" />
+  <configuration_option name="opcache.consistency_checks" value="0" />
+  <configuration_option name="opcache.validate_timestamps" value="1" />
+  <configuration_option name="upload_max_filesize" value="1" />
+  <configuration_option name="post_max_size" value="100M" />
+  <configuration_option name="xdebug.remote_enable" value="1" />
+  <configuration_option name="xdebug.remote_connect_back" value="1" />
+  <configuration_option name="xdebug.remote_autostart" value="1" />
+  <configuration_option name="xdebug.remote_host" value="0.0.0.0" />
+  <configuration_option name="xdebug.remote_port" value="9000" />
+  <configuration_option name="xdebug.scream" value="0" />
+  <configuration_option name="xdebug.show_local_vars" value="1" />
+  <configuration_option name="xdebug.idekey" value="PHPSTORM" />
+  <configuration_option name="xdebug.profiler_enable" value="0" />
+  <configuration_option name="xdebug.coverage_enable" value="0" />
+</configuration_options>
+```
+
+## Configure Tests
+
+### Integration Tests:
