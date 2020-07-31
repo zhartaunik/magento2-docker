@@ -37,7 +37,7 @@ MAGENTO_INSTALL="magento setup:install \
     --elasticsearch-host $ELASTICSEARCH_HOST \
     --elasticsearch-port $ELASTICSEARCH_PORT \
     --http-cache-hosts=$DOMAIN_NAME:6081 \
-    --amqp-host=$DOMAIN_NAME \
+    --amqp-host=$RABBITMQ_HOST \
     --amqp-port=5672 \
     --amqp-user=$RABBITMQ_USER \
     --amqp-password=$RABBITMQ_PASSWORD \

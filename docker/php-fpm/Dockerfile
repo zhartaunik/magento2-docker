@@ -44,7 +44,8 @@ RUN apt-get update \
     git \
     sudo \
     iputils-ping \
-    vim
+    vim \
+    telnet
 
 RUN docker-php-ext-install \
   bcmath \
@@ -77,14 +78,13 @@ ADD etc/php-xdebug.ini $PHP_INI_DIR/conf.d/zz-xdebug.ini
 ADD etc/opcache.ini $PHP_INI_DIR/conf.d/zz-opcache.ini
 ADD etc/mail.ini $PHP_INI_DIR/conf.d/zz-mail.ini
 
-RUN chmod +r $PHP_INI_DIR/conf.d/*
+RUN chmod -R +rw $PHP_INI_DIR/conf.d
 
 WORKDIR /var/www/magento
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
-
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 ENV MAGENTO_RUN_MODE developer
@@ -99,6 +99,8 @@ ENV DEBUG false
 
 RUN groupadd -g 1000 magento
 RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN echo "magento:magento" | chpasswd && adduser magento sudo
+
 RUN mkdir -p /home/magento
 RUN mkdir -p /var/www/magento
 RUN mkdir -p /var/www/.composer
@@ -107,5 +109,8 @@ RUN chown -R magento:magento /var/www/magento
 RUN chown -R magento:magento /var/www/.composer
 RUN chown -R magento:magento $PHP_NODE_NPM_HOME
 RUN chown -R magento:magento $PHP_NODE_NPM_CONFIG
+RUN chown -R magento:magento /usr/local/etc
+
+USER magento
 
 CMD ["php-fpm", "-F"]
