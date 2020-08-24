@@ -43,6 +43,10 @@ sudo sysctl -w vm.max_map_count=262144
 magento-build && magento-install
 ```
 
+## Configure applications
+### Mysql
+Attention. Installed default value for innodb_buffer_pool_size = 4 Gb
+
 ## Configure PHPStorm
 
 Variables for interpreter:
