@@ -66,7 +66,7 @@ RUN pecl install -o -f redis apcu xdebug \
     && docker-php-ext-enable redis apcu
 
 # Get composer installed to /usr/local/bin/composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar --version=1.10.19
 
 # Add bin files into container
 COPY bin/* /usr/local/bin/

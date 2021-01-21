@@ -8,7 +8,7 @@ cp .env.dist .env
 cp composer.env.sample composer.env
 ```
 * In .env file fill MAGENTO_APP_SECRET (32 random symbols, you may use some password generator A-Za-z0-9) and LOCAL_HOST_IP (required for xdebug).
-* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in this folder, remove '.dist' from the name)
+* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in this folder, remove '.dist' from the name). Path to certificates - `magento2-docker/nginx/etc/certs`
 ```shell script
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout magento.key -out magento.crt
 
@@ -37,7 +37,8 @@ Email Address []:dummy@gmail.com
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
 ```
-* Create new folder `magento` and put your magento into it.  
+* Create new folder `magento` and put your magento into it.
+* Execute `make docker:build && make docker:magento` command to create and run all necessary containers.  
 * To install magento enter the container with the command `make mg` and execute magento installation:
 ```shell script
 magento-build && magento-install
@@ -80,3 +81,26 @@ Variables for interpreter:
 ## Configure Tests
 
 ### Integration Tests:
+
+##Troubleshooting
+
+* Error during magento-build command (Magento 2.4.1)
+
+Error `Fatal error: Uncaught Error: Call to undefined function xdebug_disable() in /var/www/magento/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php on line 81
+` can be fixed the following way:
+
+Go to vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php and change it
+
+From :
+
+      if (!(bool)$debugMode && extension_loaded('xdebug')) {
+          xdebug_disable();
+      }
+      
+To :
+      
+      if (!(bool)$debugMode && extension_loaded('xdebug')) {
+          if (function_exists('xdebug_disable')) {
+              xdebug_disable();
+          }
+      }
