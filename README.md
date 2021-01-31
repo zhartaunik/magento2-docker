@@ -8,7 +8,7 @@ cp .env.dist .env
 cp composer.env.sample composer.env
 ```
 * In .env file fill MAGENTO_APP_SECRET (32 random symbols, you may use some password generator A-Za-z0-9) and LOCAL_HOST_IP (required for xdebug).
-* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in this folder, remove '.dist' from the name)
+* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in ```docker/nginx/etc/certs folder```, remove '.dist' from the name)
 ```shell script
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout magento.key -out magento.crt
 

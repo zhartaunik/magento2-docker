@@ -12,7 +12,7 @@ services:
     command: redis-server --appendonly no --maxmemory-policy allkeys-lru --maxmemory 500mb --loglevel verbose
     restart: always
     image: redis:latest
-    hostname: redis.magento2.docker
+    hostname: redis.${DOMAIN_NAME}
     ports:
       - 127.0.0.1:6379:6379
 
@@ -50,12 +50,12 @@ services:
 
   magento:
     container_name: magento
-    hostname: fpm.magento2.docker
+    hostname: fpm.${DOMAIN_NAME}
     build:
       context: ./docker/php-fpm/
     volumes:
       - ./magento:/var/www/magento
-      - ./docker/volume/.composer:/var/www/.composer
+      - ./docker/volume/.composer:/home/magento/.composer
     extra_hosts:
       - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
     env_file:
@@ -64,7 +64,7 @@ services:
       - ./config.env
     environment:
       - XDEBUG_CONFIG=idekey=PHPSTORM
-      - PHP_IDE_CONFIG=serverName=magento2.docker
+      - PHP_IDE_CONFIG=serverName=${DOMAIN_NAME}
 
   mysql:
     container_name: mysql
@@ -85,7 +85,7 @@ services:
     container_name: magento_cli
     build:
       context: ./docker/php-cli/
-    hostname: cli.magento2.docker
+    hostname: cli.${DOMAIN_NAME}
     volumes:
       - ./docker/volume/.composer/cache:/root/.composer/cache
       - ./magento:/var/www/magento
@@ -122,7 +122,7 @@ services:
     build:
       context: ./docker/rabbit
     image: rabbitmq:latest
-    hostname: rabbit.magento2.docker
+    hostname: rabbit.${DOMAIN_NAME}
     ports:
       - 15672:15672
       - 5672:5672
