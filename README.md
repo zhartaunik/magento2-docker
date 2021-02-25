@@ -37,7 +37,7 @@ Email Address []:dummy@gmail.com
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
 ```
-* Create new folder `magento` and put your magento into it.  
+* Create new folder `magento` and put your magento into it. New Magento can be downloaded from https://magento.com/tech-resources/download 
 * To install magento enter the container with the command `make mg` and execute magento installation:
 ```shell script
 magento-build && magento-install
