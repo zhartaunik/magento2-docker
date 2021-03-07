@@ -45,7 +45,8 @@ RUN apt-get update \
     sudo \
     iputils-ping \
     vim \
-    telnet
+    telnet \
+    procps
 
 RUN docker-php-ext-install \
   bcmath \
