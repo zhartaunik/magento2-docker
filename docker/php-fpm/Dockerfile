@@ -63,7 +63,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-source delete
 
 # Install Xdebug (but don't enable)
-RUN pecl install -o -f redis apcu xdebug \
+RUN pecl install -o -f redis apcu xdebug-2.9.8 \
     && docker-php-ext-enable redis apcu
 
 # Get composer installed to /usr/local/bin/composer
