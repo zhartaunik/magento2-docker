@@ -1,4 +1,4 @@
-FROM redis:latest
+FROM redis:5
 
 ARG REDIS_PASSWORD=B9xySyytUVGGpYuR
 

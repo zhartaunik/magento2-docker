@@ -1,4 +1,4 @@
-FROM varnish:6.2
+FROM varnish:6.4
 
 RUN apt update && apt install -y procps
 
