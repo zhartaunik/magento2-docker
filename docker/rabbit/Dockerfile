@@ -1,4 +1,4 @@
-FROM rabbitmq:3-management
+FROM rabbitmq:3.8-management
 
 # Define environment variables.
 ENV RABBITMQ_USER ${RABBITMQ_USER}
