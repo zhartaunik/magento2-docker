@@ -45,7 +45,8 @@ RUN apt-get update \
     sudo \
     iputils-ping \
     vim \
-    telnet
+    telnet \
+    procps
 
 RUN docker-php-ext-install \
   bcmath \
@@ -62,11 +63,12 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-source delete
 
 # Install Xdebug (but don't enable)
-RUN pecl install -o -f redis apcu xdebug \
+RUN pecl install -o -f redis apcu xdebug-2.9.8 \
     && docker-php-ext-enable redis apcu
 
 # Get composer installed to /usr/local/bin/composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar --version=1.10.19
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
+    #--version=2.1.3
 
 # Add bin files into container
 COPY bin/* /usr/local/bin/

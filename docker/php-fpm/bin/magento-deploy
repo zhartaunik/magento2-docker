@@ -50,4 +50,16 @@ else
     composer dump-autoload -o
 fi
 
+if [ ! -f "./Gruntfile.js" ]; then
+    cp ./Gruntfile.js.sample ./Gruntfile.js
+fi
+
+if [ ! -f "./package.json" ]; then
+    cp ./package.json.sample ./package.json
+fi
+
+npm install
+
+grunt exec && grunt less
+
 echo "Deployment is successfully completed"
