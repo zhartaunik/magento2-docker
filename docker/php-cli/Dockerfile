@@ -42,7 +42,6 @@ RUN docker-php-ext-install \
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
-
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Get composer installed to /usr/local/bin/composer
@@ -60,6 +59,8 @@ RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
 
 RUN groupadd -g 1000 magento
 RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN echo "magento:magento" | chpasswd && adduser magento sudo
+
 RUN mkdir -p /home/magento
 RUN mkdir -p /var/www/magento
 RUN mkdir -p /var/www/.composer
@@ -68,5 +69,8 @@ RUN chown -R magento:magento /var/www/magento
 RUN chown -R magento:magento /var/www/.composer
 RUN chown -R magento:magento $PHP_NODE_NPM_HOME
 RUN chown -R magento:magento $PHP_NODE_NPM_CONFIG
+RUN chown -R magento:magento /usr/local/etc
 
-CMD ["bash"]
+USER magento
+
+CMD ["php-fpm", "-F"]
