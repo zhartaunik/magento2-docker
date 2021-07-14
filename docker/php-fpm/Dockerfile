@@ -15,15 +15,13 @@ ENV PHP_NODE_NPM_CONFIG ${PHP_NODE_NPM_CONFIG}
 RUN mkdir -p $PHP_NODE_NPM_HOME $PHP_NODE_NPM_CONFIG
 
 # install node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
-RUN apt-get install -y npm
 RUN apt-get install -y fontconfig
-# Clean Up
-#    && rm -rf /var/lib/apt/lists/* \
-#	&& apt-get clean -y
 RUN npm install -g grunt
 RUN npm install phantomjs
+# Package for critical CSS
+RUN npm install -g critical --unsafe-perm=true
 
 # Install dependencies
 RUN apt-get update \
