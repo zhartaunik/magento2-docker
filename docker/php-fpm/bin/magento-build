@@ -4,11 +4,11 @@
 
 set -e
 
-MAGE_CONFIG_FILE="$MAGENTO_ROOT/app/etc/env.php"
-if [ -f $MAGE_CONFIG_FILE ]; then
-   echo "Remove $MAGE_CONFIG_FILE"
-   rm $MAGE_CONFIG_FILE
-fi
+#MAGE_CONFIG_FILE="$MAGENTO_ROOT/app/etc/env.php"
+#if [ -f $MAGE_CONFIG_FILE ]; then
+#   echo "Remove $MAGE_CONFIG_FILE"
+#   rm $MAGE_CONFIG_FILE
+#fi
 
 composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-interaction --no-progress --no-suggest \
   --optimize-autoloader --classmap-authoritative
