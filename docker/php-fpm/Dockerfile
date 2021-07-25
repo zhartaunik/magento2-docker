@@ -20,8 +20,6 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y fontconfig
 RUN npm install -g grunt
 RUN npm install phantomjs
-# Package for critical CSS
-RUN npm install -g critical --unsafe-perm=true
 
 # Install dependencies
 RUN apt-get update \
