@@ -1,4 +1,4 @@
-FROM nginx:1.9
+FROM nginx:1.21
 
 MAINTAINER Nick Jones <nick@nicksays.co.uk>
 
