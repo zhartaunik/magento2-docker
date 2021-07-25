@@ -64,8 +64,8 @@ RUN pecl install mcrypt-1.0.2
 RUN docker-php-ext-enable mcrypt
 
 # Install Xdebug (but don't enable)
-RUN pecl install -o -f redis apcu xdebug-2.9.8 \
-    && docker-php-ext-enable redis apcu
+RUN pecl install -o -f redis apcu xdebug \
+    && docker-php-ext-enable redis apcu xdebug
 
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
