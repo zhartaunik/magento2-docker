@@ -15,13 +15,9 @@ ENV PHP_NODE_NPM_CONFIG ${PHP_NODE_NPM_CONFIG}
 RUN mkdir -p $PHP_NODE_NPM_HOME $PHP_NODE_NPM_CONFIG
 
 # install node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
-RUN apt-get install -y npm
 RUN apt-get install -y fontconfig
-# Clean Up
-#    && rm -rf /var/lib/apt/lists/* \
-#	&& apt-get clean -y
 RUN npm install -g grunt
 RUN npm install phantomjs
 
@@ -63,8 +59,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-source delete
 
 # Install Xdebug (but don't enable)
-RUN pecl install -o -f redis apcu xdebug-2.9.8 \
-    && docker-php-ext-enable redis apcu
+RUN pecl install -o -f redis apcu xdebug \
+    && docker-php-ext-enable redis apcu xdebug
 
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar
