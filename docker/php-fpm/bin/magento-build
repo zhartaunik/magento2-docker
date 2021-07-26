@@ -4,6 +4,9 @@
 
 set -e
 
+composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-interaction --no-progress --no-suggest \
+  --optimize-autoloader --classmap-authoritative
+
 composer --no-interaction --prefer-dist --working-dir=$MAGENTO_ROOT install
 
 if [[ "${MAGENTO_RUN_MODE}" =~ ^(developer)$ ]]; then
