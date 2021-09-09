@@ -58,7 +58,7 @@ ADD bin/* /usr/local/bin/
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
 
 RUN groupadd -g 1000 magento
-RUN useradd -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
 RUN echo "magento:magento" | chpasswd && adduser magento sudo
 
 RUN mkdir -p /home/magento

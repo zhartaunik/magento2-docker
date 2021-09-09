@@ -2,6 +2,21 @@
 
 ## Quick Start
 
+* **!Important** ensure that your current user has uid/gid equals 1000/1000.
+```shell
+user@user-Laptop:~/Projects/clean$ id
+uid=1000(user) gid=1000(user) groups=1000(user),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lpadmin),126(sambashare),129(docker)
+```
+If you have different uid/gid you need to modify `docker/php-fpm/Dockerfile` and `docker/php-cli/Dockerfile` replace:
+```shell
+RUN groupadd -g 1000 magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+```
+With
+```shell
+RUN groupadd -g {your_gid} magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u {your_uid} -g {your_gid} magento
+```
 * Prepare env files:
 ```shell script
 cp .env.dist .env
