@@ -4,6 +4,12 @@
 
 set -e
 
+if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
+    echo "It's not recommended to install magento in production mode."
+    echo "Better install in developer mode and then switch to production."
+    exit
+fi
+
 echo "Install Magento"
 MAGENTO_INSTALL="magento setup:install \
     --key=$MAGENTO_APP_SECRET \
