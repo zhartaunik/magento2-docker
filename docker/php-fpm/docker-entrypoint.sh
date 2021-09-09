@@ -48,6 +48,7 @@ fi
 sed -i "s|{{PHP_OPCACHE_MEMORY_CONSUMPTION}}|${PHP_OPCACHE_MEMORY_CONSUMPTION}|g" $PHP_INI_DIR/conf.d/zz-opcache.ini
 sed -i "s|{{PHP_OPCACHE_MAX_ACCELERATED_FILES}}|${PHP_OPCACHE_MAX_ACCELERATED_FILES}|g" $PHP_INI_DIR/conf.d/zz-opcache.ini
 
+sed -i "s|{{PHP_XDEBUG_MODE}}|${PHP_XDEBUG_MODE}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
 sed -i "s|{{PHP_XDEBUG_REMOTE_HOST}}|${PHP_XDEBUG_REMOTE_HOST}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
 sed -i "s|{{PHP_XDEBUG_REMOTE_PORT}}|${PHP_XDEBUG_REMOTE_PORT}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
 sed -i "s|{{PHP_XDEBUG_IDEKEY}}|${PHP_XDEBUG_IDEKEY}|g" $PHP_INI_DIR/conf.d/zz-xdebug.ini
