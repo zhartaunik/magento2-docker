@@ -2,13 +2,28 @@
 
 ## Quick Start
 
+* **!Important** ensure that your current user has uid/gid equals 1000/1000.
+```shell
+user@user-Laptop:~/Projects/clean$ id
+uid=1000(user) gid=1000(user) groups=1000(user),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lpadmin),126(sambashare),129(docker)
+```
+If you have different uid/gid you need to modify `docker/php-fpm/Dockerfile` and `docker/php-cli/Dockerfile` replace:
+```shell
+RUN groupadd -g 1000 magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+```
+With
+```shell
+RUN groupadd -g {your_gid} magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u {your_uid} -g {your_gid} magento
+```
 * Prepare env files:
 ```shell script
 cp .env.dist .env
 cp composer.env.sample composer.env
 ```
 * In .env file fill MAGENTO_APP_SECRET (32 random symbols, you may use some password generator A-Za-z0-9) and LOCAL_HOST_IP (required for xdebug).
-* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in ```docker/nginx/etc/certs folder```, remove '.dist' from the name)
+* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in ```docker/nginx/etc/certs folder```, remove '.dist' from the name). Path to certificates - `magento2-docker/nginx/etc/certs`
 ```shell script
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout magento.key -out magento.crt
 
@@ -38,6 +53,7 @@ Email Address []:dummy@gmail.com
 sudo sysctl -w vm.max_map_count=262144
 ```
 * Create new folder `magento` and put your magento into it. New Magento can be downloaded from https://magento.com/tech-resources/download 
+* Execute `make docker:build && make docker:magento` command to create and run all necessary containers (without cron).  
 * To install magento enter the container with the command `make mg` and execute magento installation:
 ```shell script
 magento-build && magento-install
@@ -80,3 +96,26 @@ Variables for interpreter:
 ## Configure Tests
 
 ### Integration Tests:
+
+##Troubleshooting
+
+* Error during magento-build command (Magento 2.4.1)
+
+Error `Fatal error: Uncaught Error: Call to undefined function xdebug_disable() in /var/www/magento/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php on line 81
+` can be fixed the following way:
+
+Go to vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php and change it
+
+From :
+
+      if (!(bool)$debugMode && extension_loaded('xdebug')) {
+          xdebug_disable();
+      }
+      
+To :
+      
+      if (!(bool)$debugMode && extension_loaded('xdebug')) {
+          if (function_exists('xdebug_disable')) {
+              xdebug_disable();
+          }
+      }
