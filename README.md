@@ -1,5 +1,11 @@
 # Magento 2 Docker
 
+Before reading next section you may execute bash script to check most of the things, described below.
+
+```shell
+sh check.sh
+```
+
 ## Quick Start
 
 * **!Important** ensure that your current user has uid/gid equals 1000/1000.
