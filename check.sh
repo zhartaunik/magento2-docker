@@ -46,6 +46,8 @@ if [ -f "${COMPOSER_ENV}" ]; then
   else
     echo "${BGGREEN}[OK] Composer keys are fine.";
   fi
+else
+  echo "${BGRED}[FAIL] ${COMPOSER_ENV} does not exist."
 fi
 
 # 3. Check nginx certificates.
