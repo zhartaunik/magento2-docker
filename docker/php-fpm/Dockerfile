@@ -67,7 +67,7 @@ RUN pecl install -o -f redis apcu xdebug \
 
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
-    --version=1.10.20
+    --version=1.10.21
 
 # Add bin files into container
 COPY bin/* /usr/local/bin/
