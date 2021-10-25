@@ -29,7 +29,7 @@
         <ini name="xdebug.max_nesting_level" value="200"/>
     </php>
     <filter>
-        <whitelist addUncoveredFilesFromWhiteList="true">
+        <whitelist>
             <directory suffix=".php">../../../app/code/*</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
             <directory suffix=".php">../../../setup/src/*</directory>
@@ -42,7 +42,7 @@
         </whitelist>
     </filter>
     <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
@@ -64,7 +64,7 @@
         </listener>
         <listener class="Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager"/>
     </listeners>
-    <logging>
+    <!--<logging>-->
         <!--coverage_html_placeholder
             <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>
         coverage_html_placeholder-->
@@ -77,5 +77,5 @@
         <!--coverage_crap4j_placeholder
             <log type="coverage-crap4j" target="{{coverage_dir}}/test-reports/phpunit.crap4j.xml"/>
         coverage_crap4j_placeholder-->
-    </logging>
+    <!--</logging>-->
 </phpunit>
