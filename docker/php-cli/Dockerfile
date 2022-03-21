@@ -26,9 +26,11 @@ RUN apt-get update \
      # dependency for zip
     libzip-dev \
     sudo \
-    cron \ 
-    rsyslog \ 
-    git
+    cron \
+    rsyslog \
+    git \
+    procps \
+    vim
 
 RUN docker-php-ext-install \
   bcmath \
@@ -42,7 +44,7 @@ RUN docker-php-ext-install \
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
-ENTRYPOINT ["/docker-entrypoint.sh"]
+#ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -70,6 +72,13 @@ RUN chown -R magento:magento /var/www/.composer
 RUN chown -R magento:magento $PHP_NODE_NPM_HOME
 RUN chown -R magento:magento $PHP_NODE_NPM_CONFIG
 RUN chown -R magento:magento /usr/local/etc
+
+ADD cron/magento /etc/cron.d/magento
+RUN chown magento:magento /etc/cron.d/magento
+RUN chmod u+s /usr/sbin/cron
+RUN touch /var/log/cron.log
+RUN chown magento:magento /var/log/cron.log
+RUN crontab -u magento /etc/cron.d/magento
 
 USER magento
 
