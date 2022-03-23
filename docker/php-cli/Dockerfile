@@ -41,11 +41,6 @@ RUN docker-php-ext-install \
   zip \
   sockets
 
-ADD docker-entrypoint.sh /docker-entrypoint.sh
-
-RUN ["chmod", "+x", "/docker-entrypoint.sh"]
-#ENTRYPOINT ["/docker-entrypoint.sh"]
-
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
