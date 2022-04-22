@@ -1,5 +1,11 @@
 # Magento 2 Docker
 
+Before reading next section you may execute bash script to check most of the things, described below.
+
+```shell
+sh check.sh
+```
+
 ## Quick Start
 
 * **!Important** ensure that your current user has uid/gid equals 1000/1000.
@@ -65,32 +71,48 @@ Attention. Installed default value for innodb_buffer_pool_size = 4 Gb
 
 ## Configure PHPStorm
 
-Variables for interpreter:
+### Establish code sniffers.
+
+The best way would be configuration *PHP / Quality tools* manually (setup interpreter). Then create following file. With it *Settings / Editor / Inspections / Quality Tools* settings will be configured as desired. 
+
+> inspectionProfiles/Project_Default.xml
 ```xml
-<configuration_options>
-  <configuration_option name="memory_limit" value="4G" />
-  <configuration_option name="apc.enabled" value="0" />
-  <configuration_option name="apc.shm_size" value="0" />
-  <configuration_option name="apc.ttl" value="3600" />
-  <configuration_option name="apc.gc_ttl" value="32M" />
-  <configuration_option name="opcache.enable" value="0" />
-  <configuration_option name="opcache.memory_consumption" value="512MB" />
-  <configuration_option name="opcache.max_accelerated_files" value="60000" />
-  <configuration_option name="opcache.consistency_checks" value="0" />
-  <configuration_option name="opcache.validate_timestamps" value="1" />
-  <configuration_option name="upload_max_filesize" value="1" />
-  <configuration_option name="post_max_size" value="100M" />
-  <configuration_option name="xdebug.remote_enable" value="1" />
-  <configuration_option name="xdebug.remote_connect_back" value="1" />
-  <configuration_option name="xdebug.remote_autostart" value="1" />
-  <configuration_option name="xdebug.remote_host" value="0.0.0.0" />
-  <configuration_option name="xdebug.remote_port" value="9000" />
-  <configuration_option name="xdebug.scream" value="0" />
-  <configuration_option name="xdebug.show_local_vars" value="1" />
-  <configuration_option name="xdebug.idekey" value="PHPSTORM" />
-  <configuration_option name="xdebug.profiler_enable" value="0" />
-  <configuration_option name="xdebug.coverage_enable" value="0" />
-</configuration_options>
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="MessDetectorValidationInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="CODESIZE" value="true" />
+      <option name="CONTROVERSIAL" value="true" />
+      <option name="DESIGN" value="true" />
+      <option name="UNUSEDCODE" value="true" />
+      <option name="NAMING" value="true" />
+      <option name="customRulesets">
+        <list>
+          <RulesetDescriptor>
+            <option name="name" value="Magento PHPMD rule set" />
+            <option name="path" value="$PROJECT_DIR$/magento/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml" />
+          </RulesetDescriptor>
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PhpCSFixerValidationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="CODING_STANDARD" value="Custom" />
+      <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/magento/vendor/magento/magento-coding-standard/Magento2/ruleset.xml" />
+      <option name="SHOW_SNIFF_NAMES" value="true" />
+      <option name="USE_INSTALLED_PATHS" value="true" />
+      <option name="INSTALLED_PATHS" value="$PROJECT_DIR$/magento/vendor/phpcompatibility/php-compatibility/PHPCompatibility" />
+      <option name="EXTENSIONS" value="php,js,css,inc" />
+    </inspection_tool>
+    <inspection_tool class="PhpStanGlobal" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="FULL_PROJECT" value="true" />
+      <option name="level" value="8" />
+      <option name="config" value="$PROJECT_DIR$/magento/vendor/bitexpert/phpstan-magento/extension.neon" />
+      <option name="autoload" value="$PROJECT_DIR$/magento/vendor/bitexpert/phpstan-magento/autoload.php" />
+    </inspection_tool>
+  </profile>
+</component>
+
 ```
 
 ## Configure Tests
