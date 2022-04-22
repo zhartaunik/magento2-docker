@@ -67,7 +67,7 @@ CURRENT_GID="$(id | grep -oP 'gid=\K(\d{1,4})')"
 if [ "${CURRENT_UID}" = "1000" ] && [ "${CURRENT_GID}" = "1000" ]; then
   echo "${BGGREEN}[OK] Your UID=${CURRENT_UID} and GID=${CURRENT_GID}, no action needed.";
 else
-  echo "${BGRED}[FAIL] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} please check the readme file for further actions.";
+  echo "${BGYELLOW}[FAIL] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} please check the readme file for further actions.";
 fi
 
 tput sgr0
