@@ -19,5 +19,5 @@ if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
     magento setup:static-content:deploy -f --theme=all -- $MAGENTO_APP_LOCALE_CODE
 fi
 
-echo "Cleanup var folder"
-rm -fr $MAGENTO_ROOT/var/* 2> /dev/null || true
+echo "Cleanup var/view_preprocessed folder"
+rm -fr $MAGENTO_ROOT/var/view_preprocessed 2> /dev/null || true
