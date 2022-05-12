@@ -31,6 +31,7 @@ MAGENTO_DEPLOY="magento setup:config:set -s -n \
     --http-cache-hosts=$VARNISH_HOST:$VARNISH_PORT \
     --amqp-host=$RABBITMQ_HOST \
     --amqp-port=5672 \
+    --amqp-ssl=0 \
     --amqp-user=$RABBITMQ_USER \
     --amqp-password=$RABBITMQ_PASSWORD \
     --amqp-virtualhost=$RABBITMQ_VIRTUALHOST \
