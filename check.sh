@@ -13,7 +13,7 @@ if [ -f "${DOT_ENV}" ]; then
 
   YOUR_IP=$(grep -oP 'LOCAL_HOST_IP=\K([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' "${DOT_ENV}");
 
-  if (YOUR_IP); then
+  if [ ! -z "$YOUR_IP" ]; then
     if [ "$(command -v ifconfig)" = "/usr/sbin/ifconfig" ] && (ifconfig | grep -q "inet ${YOUR_IP}"); then
       echo "${BGGREEN}[OK] IP Address is fine and equals ${YOUR_IP}. This address is registered in .env file.";
     else
@@ -61,8 +61,8 @@ fi
 
 # 4. Check uid and gid for the current user.
 
-CURRENT_UID="$(id | grep -oP 'uid=\K(\d{1,4})')"
-CURRENT_GID="$(id | grep -oP 'gid=\K(\d{1,4})')"
+CURRENT_UID="$(id | grep -oP 'uid=\K(\d{1,})')"
+CURRENT_GID="$(id | grep -oP 'gid=\K(\d{1,})')"
 
 if [ "${CURRENT_UID}" = "1000" ] && [ "${CURRENT_GID}" = "1000" ]; then
   echo "${BGGREEN}[OK] Your UID=${CURRENT_UID} and GID=${CURRENT_GID}, no action needed.";

@@ -28,8 +28,9 @@ RUN useradd --no-log-init -d /home/magento -s /bin/bash -u {your_uid} -g {your_g
 cp .env.dist .env
 cp composer.env.sample composer.env
 ```
-* In .env file fill MAGENTO_APP_SECRET (32 random symbols, you may use some password generator A-Za-z0-9) and LOCAL_HOST_IP (required for xdebug).
-* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in ```docker/nginx/etc/certs folder```, remove '.dist' from the name). Path to certificates - `magento2-docker/nginx/etc/certs`
+* In .env file fill MAGENTO_APP_SECRET (32 random symbols, you may use some password generator A-Za-z0-9), by default it's prefilled. 
+* Enter your IP (usually 192.168.x.x, can be seen with the command ifconfig) LOCAL_HOST_IP
+* Generate certificates for your domain. (There are two certificates for domain 'magento2.docker' in ```docker/nginx/etc/certs folder```, remove '.dist' from the name). Path to certificates - `magento2-docker/nginx/etc/certs`. The command below is required only if you need to generate different certificates **OTHERWISE SKIP THE COMMAND BELOW**
 ```shell script
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout magento.key -out magento.crt
 
@@ -58,7 +59,9 @@ Email Address []:dummy@gmail.com
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
 ```
-* Create new folder `magento` and put your magento into it. New Magento can be downloaded from https://magento.com/tech-resources/download 
+* Create new folder `magento` and put your magento into it.
+  * Magento can be downloaded from https://magento.com/tech-resources/download
+  * `composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition <install-directory-name>`
 * Execute `make docker:build && make docker:magento` command to create and run all necessary containers (without cron).  
 * To install magento enter the container with the command `make mg` and execute magento installation:
 ```shell script
