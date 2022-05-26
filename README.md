@@ -4,7 +4,7 @@
 ### Configure Docker.
 
 When you are done with the shell script, follow the next points:
-* Run shell script in the root directory (this may update files in your docker directory):
+* Run shell script in the root directory (this may update files in your docker directory). Keep in mind, execution of this script is idempotent (_can be applied multiple times without changing the result_).
 ```shell
 sh check.sh
 ```
