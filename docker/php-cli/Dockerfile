@@ -44,6 +44,8 @@ RUN docker-php-ext-install \
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+ADD etc/php-cli.ini $PHP_INI_DIR/conf.d/zz-php.ini
+
 ARG PHP_NODE_NPM_HOME=/var/www/.npm
 ARG PHP_NODE_NPM_CONFIG=/var/www/.config
 ENV PHP_NODE_NPM_HOME ${PHP_NODE_NPM_HOME}

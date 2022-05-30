@@ -13,7 +13,7 @@ if [ -f "${DOT_ENV}" ]; then
 
   YOUR_IP=$(grep -oP 'LOCAL_HOST_IP=\K([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' "${DOT_ENV}");
 
-  if (YOUR_IP); then
+  if [ ! -z "$YOUR_IP" ]; then
     if [ "$(command -v ifconfig)" = "/usr/sbin/ifconfig" ] && (ifconfig | grep -q "inet ${YOUR_IP}"); then
       echo "${BGGREEN}[OK] IP Address is fine and equals ${YOUR_IP}. This address is registered in .env file.";
     else
@@ -52,22 +52,21 @@ fi
 
 NGINX_SSL_CERT="$(grep -oP "NGINX_SSL_CERT=\K(\w+.\w+)" "${DOT_ENV}")"
 NGINX_SSL_CERT_KEY=$(grep -oP "NGINX_SSL_CERT_KEY=\K(\w+.\w+)" "${DOT_ENV}")
+cp docker/nginx/etc/certs/${NGINX_SSL_CERT}.dist docker/nginx/etc/certs/${NGINX_SSL_CERT}
+cp docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}.dist docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}
 
-if [ -f "docker/nginx/etc/certs/${NGINX_SSL_CERT}" ] && [ -f "docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}" ]; then
-  echo "${BGGREEN}[OK] Certificates are existing.";
-else
-  echo "${BGRED}[FAIL] Please check nginx certificates.";
-fi
+echo "${BGGREEN}[OK] Certificates were generated successfully.";
 
 # 4. Check uid and gid for the current user.
 
-CURRENT_UID="$(id | grep -oP 'uid=\K(\d{1,4})')"
-CURRENT_GID="$(id | grep -oP 'gid=\K(\d{1,4})')"
+CURRENT_UID="$(id -u $USER)"
+CURRENT_GID="$(id -g $USER)"
 
-if [ "${CURRENT_UID}" = "1000" ] && [ "${CURRENT_GID}" = "1000" ]; then
-  echo "${BGGREEN}[OK] Your UID=${CURRENT_UID} and GID=${CURRENT_GID}, no action needed.";
-else
-  echo "${BGYELLOW}[FAIL] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} please check the readme file for further actions.";
-fi
+sed -i 's/RUN groupadd -g 1000 magento/RUN groupadd -g '"$CURRENT_GID"' magento/g' ./docker/php-fpm/Dockerfile
+sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magento/g' ./docker/php-fpm/Dockerfile
+sed -i 's/RUN groupadd -g 1000 magento/RUN groupadd -g '"$CURRENT_GID"' magento/g' ./docker/php-cli/Dockerfile
+sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magento/g' ./docker/php-cli/Dockerfile
+
+echo "${BGGREEN}[OK] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} have been updated for php-fpm and php-cli.";
 
 tput sgr0
