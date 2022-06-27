@@ -28,5 +28,5 @@ if [[ "${MAGENTO_RUN_MODE}" =~ ^(production)$ ]]; then
     echo ""
     echo "Build static files of the theme in production mode"
     echo ""
-    magento setup:static-content:deploy -f --theme=all -- $MAGENTO_APP_LOCALE_CODE
+    magento setup:static-content:deploy -f
 fi
