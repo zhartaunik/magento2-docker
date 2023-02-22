@@ -8,11 +8,7 @@ When you are done with the shell script, follow the next points:
 ```shell
 sh check.sh
 ```
-* Prepare env files:
-```shell script
-cp .env.dist .env
-cp composer.env.sample composer.env
-```
+* Update env files according to your needs. Update your magento keys in composer.env
 * Enter your IP in `.env` (usually 192.168.x.x, can be seen with the command ifconfig) LOCAL_HOST_IP
 * For elasticsearch work execute from your OS command line:
 ```shell script
@@ -128,7 +124,7 @@ The best way would be configuration *PHP / Quality tools* manually (setup interp
 
 ### Integration Tests:
 
-##Troubleshooting
+## Troubleshooting
 
 * Error during magento-build command (Magento 2.4.1)
 
