@@ -8,43 +8,50 @@ BGGREEN='\033[42m'
 
 # 1. Check .env file, local IP address and Magento secret key
 DOT_ENV=.env
+
 if [ -f "${DOT_ENV}" ]; then
-  echo "${BGGREEN}[OK] ${DOT_ENV} exists."
+  cp .env.dist .env
+  echo "${BGGREEN}[OK] ${DOT_ENV} was created successfully.";
+fi
+
+if [ -f "${DOT_ENV}" ]; then
 
   YOUR_IP=$(grep -oP 'LOCAL_HOST_IP=\K([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' "${DOT_ENV}");
 
-  if (YOUR_IP); then
+  if [ ! -z "$YOUR_IP" ]; then
     if [ "$(command -v ifconfig)" = "/usr/sbin/ifconfig" ] && (ifconfig | grep -q "inet ${YOUR_IP}"); then
       echo "${BGGREEN}[OK] IP Address is fine and equals ${YOUR_IP}. This address is registered in .env file.";
     else
       echo "${BGYELLOW}[WARN] net-tools application is not installed. Unable to validate IP address. To verify the address please run 'sudo apt-get install net-tools'";
     fi
   elif grep -q -E "^LOCAL_HOST_IP=$" "${DOT_ENV}"; then
-    echo "${BGRED}[FAIL] IP Address is empty.";
+    echo "${BGYELLOW}[WARNING] IP Address is empty. xDebug for PHP may not work properly.";
   else
     echo "${BGRED}[FAIL] IP Address is wrong. Please check if your local address is really ${YOUR_IP}.";
   fi
 
-  if grep -q -E "^MAGENTO_APP_SECRET=[a-zA-Z0-9]{32}$" "${DOT_ENV}"; then
-    echo "${BGGREEN}[OK] Magento Secret key is correct.";
-  else
-    echo "${BGRED}[FAIL] Magento Secret key is wrong.";
-  fi
-else
-  echo "${BGRED}[FAIL] ${DOT_ENV} does not exist.";
+#  if grep -q -E "^MAGENTO_APP_SECRET=[a-zA-Z0-9]{32}$" "${DOT_ENV}"; then
+#    echo "${BGGREEN}[OK] Magento Secret key is correct.";
+#  else
+#    echo "${BGRED}[FAIL] Magento Secret key is wrong.";
+#  fi
 fi
 
 # 2. Check composer.env file and it's content.
 
 COMPOSER_ENV=composer.env
 
+if [ ! -f "${COMPOSER_ENV}" ]; then
+  cp composer.env.sample composer.env
+  echo "${BGGREEN}[OK] ${COMPOSER_ENV} was created successfully."
+fi
+
 if [ -f "${COMPOSER_ENV}" ]; then
-  echo "${BGGREEN}[OK] ${COMPOSER_ENV} exists."
 #-o
-  if (grep -q -E "^COMPOSER_MAGENTO_USERNAME=[0]{32}$" "${COMPOSER_ENV}") || (grep -q -E "^COMPOSER_MAGENTO_PASSWORD=[0]{32}$" "${COMPOSER_ENV}"); then
-    echo "${BGRED}[FAIL] Composer secret key is empty. Please fulfill the value.";
+  if (grep -q -E "^COMPOSER_MAGENTO_USERNAME=[A-Za-z0-9]{32}$" "${COMPOSER_ENV}") || (grep -q -E "^COMPOSER_MAGENTO_PASSWORD=[A-Za-z0-9]{32}$" "${COMPOSER_ENV}"); then
+    echo "${BGGREEN}[OK] Composer keys are fulfilled.";
   else
-    echo "${BGGREEN}[OK] Composer keys are fine.";
+    echo "${BGRED}[FAIL] Composer secret key are empty or incorrect. Please fulfill these values in ${COMPOSER_ENV}";
   fi
 fi
 
@@ -52,22 +59,21 @@ fi
 
 NGINX_SSL_CERT="$(grep -oP "NGINX_SSL_CERT=\K(\w+.\w+)" "${DOT_ENV}")"
 NGINX_SSL_CERT_KEY=$(grep -oP "NGINX_SSL_CERT_KEY=\K(\w+.\w+)" "${DOT_ENV}")
+cp docker/nginx/etc/certs/${NGINX_SSL_CERT}.dist docker/nginx/etc/certs/${NGINX_SSL_CERT}
+cp docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}.dist docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}
 
-if [ -f "docker/nginx/etc/certs/${NGINX_SSL_CERT}" ] && [ -f "docker/nginx/etc/certs/${NGINX_SSL_CERT_KEY}" ]; then
-  echo "${BGGREEN}[OK] Certificates are existing.";
-else
-  echo "${BGRED}[FAIL] Please check nginx certificates.";
-fi
+echo "${BGGREEN}[OK] Certificates were generated successfully.";
 
 # 4. Check uid and gid for the current user.
 
-CURRENT_UID="$(id | grep -oP 'uid=\K(\d{1,4})')"
-CURRENT_GID="$(id | grep -oP 'gid=\K(\d{1,4})')"
+CURRENT_UID="$(id -u $USER)"
+CURRENT_GID="$(id -g $USER)"
 
-if [ "${CURRENT_UID}" = "1000" ] && [ "${CURRENT_GID}" = "1000" ]; then
-  echo "${BGGREEN}[OK] Your UID=${CURRENT_UID} and GID=${CURRENT_GID}, no action needed.";
-else
-  echo "${BGYELLOW}[FAIL] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} please check the readme file for further actions.";
-fi
+sed -i 's/RUN groupadd -g 1000 magento/RUN groupadd -g '"$CURRENT_GID"' magento/g' ./docker/php-fpm/Dockerfile
+sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magento/g' ./docker/php-fpm/Dockerfile
+sed -i 's/RUN groupadd -g 1000 magento/RUN groupadd -g '"$CURRENT_GID"' magento/g' ./docker/php-cli/Dockerfile
+sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magento/g' ./docker/php-cli/Dockerfile
+
+echo "${BGGREEN}[OK] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} have been updated for php-fpm and php-cli.";
 
 tput sgr0

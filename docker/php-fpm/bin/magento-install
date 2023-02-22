@@ -43,12 +43,15 @@ MAGENTO_INSTALL="magento setup:install \
     --elasticsearch-host=$ELASTICSEARCH_HOST \
     --elasticsearch-port=$ELASTICSEARCH_PORT \
     --http-cache-hosts=$VARNISH_HOST:$VARNISH_PORT \
-    --amqp-host=$RABBITMQ_HOST \
-    --amqp-port=5672 \
-    --amqp-user=$RABBITMQ_USER \
-    --amqp-password=$RABBITMQ_PASSWORD \
-    --amqp-virtualhost=$RABBITMQ_VIRTUALHOST \
-    --cleanup-database"
+    --cleanup-database \
+    --no-interaction"
+
+#    --amqp-host=$RABBITMQ_HOST \
+#    --amqp-port=5672 \
+#    --amqp-ssl=0 \
+#    --amqp-user=$RABBITMQ_USER \
+#    --amqp-password=$RABBITMQ_PASSWORD \
+#    --amqp-virtualhost=$RABBITMQ_VIRTUALHOST \
 
 if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = "true" ]; then
 

@@ -44,6 +44,8 @@ RUN docker-php-ext-install \
 # Get composer installed to /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+ADD etc/php-cli.ini $PHP_INI_DIR/conf.d/zz-php.ini
+
 ARG PHP_NODE_NPM_HOME=/var/www/.npm
 ARG PHP_NODE_NPM_CONFIG=/var/www/.config
 ENV PHP_NODE_NPM_HOME ${PHP_NODE_NPM_HOME}
@@ -54,8 +56,8 @@ ADD bin/* /usr/local/bin/
 
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
 
-RUN groupadd -g 1000 magento
-RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
+RUN groupadd -g 1001 magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1001 -g 1001 magento
 RUN echo "magento:magento" | chpasswd && adduser magento sudo
 
 RUN mkdir -p /home/magento
