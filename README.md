@@ -1,27 +1,29 @@
 # Magento 2 Docker
 
 ## Quick Start
-### Configure Docker.
+
+### 1. Infrastructure part
 
 When you are done with the shell script, follow the next points:
-* Run shell script in the root directory (this may update files in your docker directory). Keep in mind, execution of this script is idempotent (_can be applied multiple times without changing the result_).
+1. Run shell script in the root directory (this may update files in your docker directory). Keep in mind, execution of this script is idempotent (_can be applied multiple times without changing the result_).
 ```shell
 sh check.sh
 ```
-* Update env files according to your needs. Update your magento keys in composer.env
-* Enter your IP in `.env` (usually 192.168.x.x, can be seen with the command ifconfig) LOCAL_HOST_IP
-* For elasticsearch work execute from your OS command line:
+2. Update your magento keys in composer.env [Get your authentication keys](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/prerequisites/authentication-keys.html?lang=en)
+3. For elasticsearch work execute from your OS command line:
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
 ```
 
-### Install Magento
+### 2. Application part (install Magento)
 
-* Create new folder `magento` and put your magento into it.
-  * Magento can be downloaded from https://magento.com/tech-resources/download
-  * `composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition <install-directory-name>`
-* Execute `make docker:build && make docker:magento` command to create and run all necessary containers (without cron).
-* To install magento enter the container with the command `make mg` and execute magento installation:
+1. **IMPORTANT!! Create new folder** `magento`.
+2. Execute from the project root `make docker:magic` command to create and run all necessary containers (without cron).
+3. Enter the container with the command `make mg` and run from the container
+```shell script
+composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+```
+4. To install magento run inside container magento installation:
 ```shell script
 magento-build && magento-install
 ```
