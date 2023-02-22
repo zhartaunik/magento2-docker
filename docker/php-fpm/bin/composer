@@ -6,9 +6,6 @@
 if [ ! -f "$MAGENTO_COMPOSER_HOME/auth.json" ]; then
 cat <<EOF > ${MAGENTO_COMPOSER_HOME}/auth.json
 {
-  "github-oauth": {
-    "github.com": "${COMPOSER_GITHUB_TOKEN}"
-  },
   "http-basic": {
     "repo.magento.com": {
       "username": "${COMPOSER_MAGENTO_USERNAME}",
