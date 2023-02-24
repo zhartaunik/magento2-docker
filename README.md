@@ -4,7 +4,7 @@
 
 ### 1. Infrastructure part
 
-When you are done with the shell script, follow the next points:
+Follow the next points:
 1. Run shell script in the root directory (this may update files in your docker directory). Keep in mind, execution of this script is idempotent (_can be applied multiple times without changing the result_).
 ```shell
 sh check.sh
@@ -13,6 +13,10 @@ sh check.sh
 3. For elasticsearch work execute from your OS command line:
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
+```
+4. Add to hosts file the following information (your magento will be accessible via https://magento2.docker/):
+```text
+127.0.0.1   magento2.docker
 ```
 
 ### 2. Application part (install Magento)
