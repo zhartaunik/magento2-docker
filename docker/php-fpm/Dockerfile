@@ -95,8 +95,8 @@ ENV PHP_ENABLE_XDEBUG false
 ENV MAGENTO_ROOT /var/www/magento
 ENV DEBUG false
 
-RUN groupadd -g 1001 magento
-RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1001 -g 1001 magento
+RUN groupadd -g 1000 magento
+RUN useradd --no-log-init -d /home/magento -s /bin/bash -u 1000 -g 1000 magento
 RUN echo "magento:magento" | chpasswd && adduser magento sudo
 
 RUN mkdir -p /home/magento
