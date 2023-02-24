@@ -9,7 +9,7 @@ BGGREEN='\033[42m'
 # 1. Check .env file, local IP address and Magento secret key
 DOT_ENV=.env
 
-if [ -f "${DOT_ENV}" ]; then
+if [ ! -f "${DOT_ENV}" ]; then
   cp .env.dist .env
   echo "${BGGREEN}[OK] ${DOT_ENV} was created successfully.";
 fi
