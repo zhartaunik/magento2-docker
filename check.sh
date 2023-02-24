@@ -9,33 +9,33 @@ BGGREEN='\033[42m'
 # 1. Check .env file, local IP address and Magento secret key
 DOT_ENV=.env
 
-if [ -f "${DOT_ENV}" ]; then
+if [ ! -f "${DOT_ENV}" ]; then
   cp .env.dist .env
   echo "${BGGREEN}[OK] ${DOT_ENV} was created successfully.";
 fi
 
-if [ -f "${DOT_ENV}" ]; then
-
-  YOUR_IP=$(grep -oP 'LOCAL_HOST_IP=\K([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' "${DOT_ENV}");
-
-  if [ ! -z "$YOUR_IP" ]; then
-    if [ "$(command -v ifconfig)" = "/usr/sbin/ifconfig" ] && (ifconfig | grep -q "inet ${YOUR_IP}"); then
-      echo "${BGGREEN}[OK] IP Address is fine and equals ${YOUR_IP}. This address is registered in .env file.";
-    else
-      echo "${BGYELLOW}[WARN] net-tools application is not installed. Unable to validate IP address. To verify the address please run 'sudo apt-get install net-tools'";
-    fi
-  elif grep -q -E "^LOCAL_HOST_IP=$" "${DOT_ENV}"; then
-    echo "${BGYELLOW}[WARNING] IP Address is empty. xDebug for PHP may not work properly.";
-  else
-    echo "${BGRED}[FAIL] IP Address is wrong. Please check if your local address is really ${YOUR_IP}.";
-  fi
+#if [ -f "${DOT_ENV}" ]; then
+#
+#  YOUR_IP=$(grep -oP 'LOCAL_HOST_IP=\K([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' "${DOT_ENV}");
+#
+#  if [ ! -z "$YOUR_IP" ]; then
+#    if [ "$(command -v ifconfig)" = "/usr/sbin/ifconfig" ] && (ifconfig | grep -q "inet ${YOUR_IP}"); then
+#      echo "${BGGREEN}[OK] IP Address is fine and equals ${YOUR_IP}. This address is registered in .env file.";
+#    else
+#      echo "${BGYELLOW}[WARN] net-tools application is not installed. Unable to validate IP address. To verify the address please run 'sudo apt-get install net-tools'";
+#    fi
+#  elif grep -q -E "^LOCAL_HOST_IP=$" "${DOT_ENV}"; then
+#    echo "${BGYELLOW}[WARNING] IP Address is empty. xDebug for PHP may not work properly.";
+#  else
+#    echo "${BGRED}[FAIL] IP Address is wrong. Please check if your local address is really ${YOUR_IP}.";
+#  fi
 
 #  if grep -q -E "^MAGENTO_APP_SECRET=[a-zA-Z0-9]{32}$" "${DOT_ENV}"; then
 #    echo "${BGGREEN}[OK] Magento Secret key is correct.";
 #  else
 #    echo "${BGRED}[FAIL] Magento Secret key is wrong.";
 #  fi
-fi
+#fi
 
 # 2. Check composer.env file and it's content.
 
