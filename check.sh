@@ -12,6 +12,8 @@ DOT_ENV=.env
 if [ ! -f "${DOT_ENV}" ]; then
   cp .env.dist .env
   echo "${BGGREEN}[OK] ${DOT_ENV} was created successfully.";
+else
+  echo "${BGGREEN}[OK] ${DOT_ENV} exists.";
 fi
 
 #if [ -f "${DOT_ENV}" ]; then
@@ -44,6 +46,8 @@ COMPOSER_ENV=composer.env
 if [ ! -f "${COMPOSER_ENV}" ]; then
   cp composer.env.sample composer.env
   echo "${BGGREEN}[OK] ${COMPOSER_ENV} was created successfully."
+else
+  echo "${BGGREEN}[OK] ${COMPOSER_ENV} exists."
 fi
 
 if [ -f "${COMPOSER_ENV}" ]; then
@@ -75,5 +79,9 @@ sed -i 's/RUN groupadd -g 1000 magento/RUN groupadd -g '"$CURRENT_GID"' magento/
 sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magento/g' ./docker/php-cli/Dockerfile
 
 echo "${BGGREEN}[OK] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} have been updated for php-fpm and php-cli.";
+
+# 5. Create magento folder.
+mkdir magento
+echo "${BGGREEN}[OK] Magento folder has been created successfully.";
 
 tput sgr0

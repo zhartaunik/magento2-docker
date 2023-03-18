@@ -21,13 +21,12 @@ sudo sysctl -w vm.max_map_count=262144
 
 ### 2. Application part (install Magento)
 
-1. **IMPORTANT!! Create new folder** `magento`.
-2. Execute from the project root `make docker:magic` command to create and run all necessary containers (without cron).
-3. Enter the container with the command `make mg` and run from the container
+1. Execute from the project root `make docker:magic` command to create and run all necessary containers (without cron).
+2. Enter the container with the command `make mg` and run from the container
 ```shell script
 composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
 ```
-4. To install magento run inside container magento installation:
+3. To install magento run inside container magento installation:
 ```shell script
 magento-build && magento-install
 ```
