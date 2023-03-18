@@ -91,6 +91,7 @@ services:
       - ./magento:/var/www/magento
     env_file:
       - ./composer.env
+      - ./config.env
       - ./.env
 
   magento_cron:
@@ -105,6 +106,7 @@ services:
       - ./magento:/var/www/magento
     env_file:
       - ./composer.env
+      - ./config.env
       - ./.env
 
   chrome:

@@ -30,7 +30,8 @@ RUN apt-get update \
     rsyslog \
     git \
     procps \
-    vim
+    vim \
+    sendmail
 
 RUN docker-php-ext-install \
   bcmath \
