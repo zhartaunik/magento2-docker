@@ -60,11 +60,11 @@ if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = 1 ]; then
   MAGENTO_INSTALL="$MAGENTO_INSTALL --use-sample-data"
 fi
 
+$MAGENTO_INSTALL
+
 if [ "$MAGENTO_APP_DISABLE_TWO_FACTOR_AUTH" = 1 ]; then
   magento module:disable $(magento module:status | grep TwoFactorAuth)
 fi
-
-$MAGENTO_INSTALL
 
 magento indexer:reindex
 magento cache:enable
