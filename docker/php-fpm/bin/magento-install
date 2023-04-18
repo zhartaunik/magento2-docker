@@ -53,6 +53,12 @@ MAGENTO_INSTALL="magento setup:install \
 #    --amqp-password=$RABBITMQ_PASSWORD \
 #    --amqp-virtualhost=$RABBITMQ_VIRTUALHOST \
 
+$MAGENTO_INSTALL
+
+if [ "$MAGENTO_APP_DISABLE_TWO_FACTOR_AUTH" = 1 ]; then
+  magento module:disable $(magento module:status | grep TwoFactorAuth)
+fi
+
 if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = 1 ]; then
   if [ ! -d "/var/www/magento/var/composer_home" ]; then
     cd /var/www/magento/var && mkdir composer_home && cd /var/www/magento
@@ -61,14 +67,9 @@ if [ "$MAGENTO_APP_USE_SAMPLE_DATA" = 1 ]; then
   cp ~/.composer/auth.json /var/www/magento/var/composer_home/
 
   magento sampledata:deploy
+  magento setup:upgrade
 
   MAGENTO_INSTALL="$MAGENTO_INSTALL --use-sample-data"
-fi
-
-$MAGENTO_INSTALL
-
-if [ "$MAGENTO_APP_DISABLE_TWO_FACTOR_AUTH" = 1 ]; then
-  magento module:disable $(magento module:status | grep TwoFactorAuth)
 fi
 
 magento indexer:reindex
