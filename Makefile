@@ -35,6 +35,7 @@ help:
 	@echo "$(call format,'make','docker:start','Start container')"
 	@echo "$(call format,'make','docker:stop','Stop container')"
 	@echo "$(call format,'make','docker:restart','Restart container')"
+	@echo "$(call format,'make','docker:reload','Stop / Kill / Start container')"
 	@echo "$(call format,'make','docker:build','Start build containers')"
 	@echo "$(call format,'make','docker:magic','Down Build Start containers')"
 
@@ -73,6 +74,10 @@ docker\:stop:
 docker\:restart:
 	@echo "$(call yellow, 'Restart container:') $(call red,$(call args))"
 	@docker-compose restart $(call args)
+
+docker\:reload:
+	@echo "$(call yellow, 'Stop / Kill / Start container') $(call red,$(call args))"
+	@docker-compose stop $(call args) && docker-compose rm -f $(call args) && docker-compose up -d $(call args)
 
 docker\:build:
 	@echo "$(call yellow,'Start build containers')"
