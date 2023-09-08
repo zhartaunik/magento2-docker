@@ -34,6 +34,7 @@ help:
 	@echo "$(call format,'make','docker:exec','Run container')"
 	@echo "$(call format,'make','docker:start','Start container')"
 	@echo "$(call format,'make','docker:stop','Stop container')"
+	@echo "$(call format,'make','docker:reload','Stop / Kill / Start container')"
 	@echo "$(call format,'make','docker:restart','Restart container')"
 	@echo "$(call format,'make','docker:build','Start build containers')"
 	@echo "$(call format,'make','docker:magic','Down Build Start containers')"
@@ -48,7 +49,7 @@ docker\:up:
 
 docker\:magento:
 	@echo "$(call yellow, 'Up all containers')"
-	@docker-compose -f docker-compose.yml up -d redis elastic mysql magento nginx varnish chrome
+	@docker-compose -f docker-compose.yml up -d redis elastic mysql magento nginx varnish chrome rabbit
 
 docker\:down:
 	@echo "$(call yellow, 'Down all containers')"
@@ -69,6 +70,10 @@ docker\:start:
 docker\:stop:
 	@echo "$(call yellow, 'Stop container:') $(call red,$(call args))"
 	@docker-compose stop $(call args)
+
+docker\:reload:
+	@echo "$(call yellow, 'Stop / Kill / Start container') $(call red,$(call args))"
+	@docker-compose stop $(call args) && docker-compose rm -f $(call args) && docker-compose up -d $(call args)
 
 docker\:restart:
 	@echo "$(call yellow, 'Restart container:') $(call red,$(call args))"
