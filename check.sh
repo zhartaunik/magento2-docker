@@ -81,7 +81,16 @@ sed -i 's/-u 1000 -g 1000 magento/-u '"$CURRENT_UID"' -g '"$CURRENT_GID"' magent
 echo "${BGGREEN}[OK] Your UID=${CURRENT_UID}, GID=${CURRENT_GID} have been updated for php-fpm and php-cli.";
 
 # 5. Create magento folder.
-mkdir magento
-echo "${BGGREEN}[OK] Magento folder has been created successfully.";
+folder_name="magento"
+if [ ! -d "$folder_name" ]; then
+  mkdir "$folder_name"
+  echo "${BGGREEN}[OK] Magento folder has been created successfully.";
+else
+  echo "${BGGREEN}[OK] Magento folder already exists.";
+fi
+
+# 6. Copy all configuration files used for different tests (unit, webapi, functional, etc.)
+cp -r test-configs/* magento/
+echo "${BGGREEN}[OK] Test configs were copied successfully.";
 
 tput sgr0
