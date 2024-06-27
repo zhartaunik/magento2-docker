@@ -136,6 +136,22 @@ services:
     env_file:
       - ./.env
 
+  pwa:
+    container_name: pwa
+    build:
+      context: ./docker/pwa
+    volumes:
+      - ./docker/pwa:/app
+    environment:
+      - MAGENTO_BACKEND_URL=https://nginx/graphql
+      - CHECKOUT_BRAINTREE_TOKEN=sandbox_5rgydjbn_8mfhg7qznx938wwf
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - PORT=3001
+    ports:
+      - '3001:3001'
+    env_file:
+      - ./.env
+
 volumes:
   elasticsearch:
   rabbitmq:

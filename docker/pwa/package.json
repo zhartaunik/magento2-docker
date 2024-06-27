@@ -1,0 +1,16 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "A sample project",
+  "main": "index.js",
+  "scripts": {
+    "start": "PORT=${PORT:-3001} node index.js",
+    "buildpack": "pwa-buildpack"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@magento/pwa-buildpack": "^8.0.1",
+    "express": "^4.17.1"
+  }
+}

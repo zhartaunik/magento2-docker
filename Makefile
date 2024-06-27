@@ -50,7 +50,7 @@ docker\:up:
 
 docker\:magento:
 	@echo "$(call yellow, 'Up all containers')"
-	@docker-compose -f docker-compose.yml up -d redis elastic mysql magento nginx varnish chrome rabbit
+	@docker-compose -f docker-compose.yml up -d redis elastic mysql magento nginx varnish chrome rabbit pwa
 
 docker\:down:
 	@echo "$(call yellow, 'Down all containers')"
@@ -71,10 +71,6 @@ docker\:start:
 docker\:stop:
 	@echo "$(call yellow, 'Stop container:') $(call red,$(call args))"
 	@docker-compose stop $(call args)
-
-docker\:reload:
-	@echo "$(call yellow, 'Stop / Kill / Start container') $(call red,$(call args))"
-	@docker-compose stop $(call args) && docker-compose rm -f $(call args) && docker-compose up -d $(call args)
 
 docker\:restart:
 	@echo "$(call yellow, 'Restart container:') $(call red,$(call args))"
