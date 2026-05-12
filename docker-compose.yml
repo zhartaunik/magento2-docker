@@ -29,7 +29,9 @@ services:
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g -XX:-UseContainerSupport
+      - JDK_JAVA_OPTIONS=-XX:-UseContainerSupport
+      - JAVA_TOOL_OPTIONS=-XX:-UseContainerSupport
     ports:
       - 9200:9200
 
@@ -47,12 +49,18 @@ services:
       - ./magento:/var/www/magento
     env_file:
       - ./.env
+    networks:
+      default:
+        aliases:
+          - ${DOMAIN_NAME}
 
   magento:
     container_name: magento
     hostname: fpm.${DOMAIN_NAME}
     build:
       context: ./docker/php-fpm/
+      cache_from:
+        - edtech-magento:latest
     volumes:
       - ./magento:/var/www/magento
       - ./docker/volume/.composer:/home/magento/.composer
@@ -111,13 +119,11 @@ services:
 
   chrome:
     container_name: chrome
-    image: selenium/standalone-chrome:3.141.59-titanium
+    image: selenium/standalone-chrome:4.1.0-20211123
     volumes:
       - /dev/shm:/dev/shm
     ports:
       - 4444:4444
-    extra_hosts:
-      - "${DOMAIN_NAME}:${LOCAL_HOST_IP}"
 
   rabbit:
     container_name: rabbit

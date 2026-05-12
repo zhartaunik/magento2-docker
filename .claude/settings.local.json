@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker exec:*)",
+      "Bash(curl:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['sessionId']\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d\\)\")",
+      "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['value']\\)\")",
+      "Bash(docker compose:*)",
+      "Bash(docker network:*)",
+      "Bash(python3 -c ':*)",
+      "Bash(bash:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); slots=d['value']['nodes'][0]['slots']; print\\('session:', slots[0].get\\('session'\\) and slots[0]['session']['sessionId'] or 'none'\\)\")"
+    ]
+  }
+}
